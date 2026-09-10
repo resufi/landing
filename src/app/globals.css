@@ -1,0 +1,136 @@
+/* Единственный глобальный CSS на проекте: токены, сброс и три утилитных
+ * класса. Всё остальное живёт в *.module.css рядом со своим компонентом —
+ * то же правило, что в приложении.
+ *
+ * Палитра и шкала отступов скопированы из fe/src/styles/tokens.css без
+ * изменений. Переход с лендинга в приложение не должен читаться как переход
+ * на другой продукт. */
+
+:root {
+	/* Тема одна — светлая. color-scheme говорит браузеру рисовать системные
+	   элементы в светлом виде даже у пользователя с тёмной настройкой. */
+	color-scheme: light;
+
+	--bg: #fbfbfa;
+	--fg: #101010;
+	--muted: #8a8a85;
+	--line: #e6e6e1;
+	--raise: #f2f2ef;
+	--accent: #12100e;
+	--accent-fg: #ffffff;
+
+	/* Транши. Цвет здесь несёт смысл — место в очереди на убыток — и потому
+	   не появляется нигде, кроме разговора о траншах. */
+	--junior: #c0553c;
+	--middle: #a8801f;
+	--senior: #2f7358;
+
+	/* Марка. Выходит из монохрома ровно дважды: логотип и главная кнопка.
+	   Надпись белая — по решению владельца продукта. Контраст на этом
+	   сиреневом 2.8:1, то есть AA не проходит; тёмная надпись давала бы
+	   6.8:1. Если понадобится вернуть доступность, не меняя белый текст,
+	   достаточно затемнить --brand примерно до #6f3ff5. */
+	--brand: #a684ff;
+	--brand-fg: #ffffff;
+
+	/* Тёмная инверсия — только блок цифр и финальный призыв. Две тёмные
+	   полосы задают странице ритм; третья была бы шумом. */
+	--dark-bg: #12100e;
+	--dark-fg: #fbfbfa;
+	--dark-muted: #8d8a84;
+	--dark-line: #2a2723;
+
+	/* Шкала отступов. Значения вне этой шкалы — ошибка ревью. */
+	--s1: 4px;
+	--s2: 8px;
+	--s3: 12px;
+	--s4: 16px;
+	--s5: 24px;
+	--s6: 32px;
+	--s7: 48px;
+	--s8: 72px;
+	--s9: 112px;
+
+	--radius: 6px;
+	/* У кнопок скругление своё и заметно крупнее, чем у карточек и таблиц:
+	   мягкая кнопка на строгой сетке читается как единственное действие. */
+	--radius-btn: 12px;
+
+	--mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+	--sans:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+
+	--page: 1080px;
+}
+
+/* Псевдоэлементы перечислены явно: селектор `*` их не покрывает, и без этого
+   ::before с рамкой оказывается на 2px шире заданного. На точках роадмапа
+   это ровно так и вышло — центр уезжал на 1px, а низ на 2px. */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	/* Якорь не должен уезжать под липкую шапку. */
+	scroll-padding-top: 80px;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font-family: var(--sans);
+	font-size: 15px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-weight: 500;
+	letter-spacing: -0.02em;
+}
+
+a {
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--fg);
+	outline-offset: 2px;
+}
+
+/* Три утилиты, которые нужны в любом модуле и потому глобальны. */
+
+.num {
+	font-family: var(--mono);
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.01em;
+}
+
+.muted {
+	color: var(--muted);
+}
+
+.small {
+	font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}

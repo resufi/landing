@@ -1,0 +1,54 @@
+.section {
+	padding-block: var(--s9);
+	border-top: 1px solid var(--line);
+}
+
+.wrap {
+	max-width: var(--page);
+	margin: 0 auto;
+	padding-inline: var(--s5);
+}
+
+/* Тёмная полоса сама себе граница — линия сверху на ней не видна и не нужна. */
+.dark {
+	background: var(--dark-bg);
+	color: var(--dark-fg);
+	border-top: 0;
+}
+
+.kicker {
+	margin: 0 0 var(--s4);
+	font-family: var(--mono);
+	font-size: 12px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.dark .kicker {
+	color: var(--dark-muted);
+}
+
+.title {
+	text-wrap: balance;
+	font-size: clamp(26px, 3.4vw, 38px);
+	line-height: 1.15;
+	max-width: 20ch;
+}
+
+.lead {
+	margin: var(--s5) 0 0;
+	max-width: 62ch;
+	font-size: 17px;
+	color: var(--muted);
+}
+
+.dark .lead {
+	color: var(--dark-muted);
+}
+
+@media (max-width: 900px) {
+	.section {
+		padding-block: var(--s8);
+	}
+}

@@ -1,0 +1,67 @@
+.header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	background: color-mix(in srgb, var(--bg) 88%, transparent);
+	backdrop-filter: blur(10px);
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s ease;
+}
+
+.stuck {
+	border-bottom-color: var(--line);
+}
+
+.inner {
+	display: flex;
+	align-items: center;
+	gap: var(--s5);
+	height: 64px;
+	max-width: var(--page);
+	margin: 0 auto;
+	padding-inline: var(--s5);
+}
+
+.brand {
+	display: flex;
+	align-items: center;
+	gap: var(--s3);
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 17px;
+	letter-spacing: -0.02em;
+}
+
+.brand img {
+	display: block;
+	flex: none;
+}
+
+.nav {
+	display: flex;
+	gap: var(--s5);
+	margin-left: auto;
+}
+
+.nav a {
+	text-decoration: none;
+	font-size: 14px;
+	color: var(--muted);
+	transition: color 0.15s ease;
+}
+
+.nav a:hover {
+	color: var(--fg);
+}
+
+/* На телефоне пунктов пять, и они не помещаются рядом с кнопкой. Прятать их
+   в бургер незачем: это те же секции, мимо которых человек и так пролистает. */
+@media (max-width: 900px) {
+	.nav {
+		display: none;
+	}
+
+	.brand {
+		margin-right: auto;
+	}
+}

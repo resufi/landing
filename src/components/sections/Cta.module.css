@@ -1,0 +1,53 @@
+.cta {
+	padding-block: var(--s9);
+	background: var(--dark-bg);
+	color: var(--dark-fg);
+	text-align: center;
+}
+
+.wrap {
+	max-width: var(--page);
+	margin: 0 auto;
+	padding-inline: var(--s5);
+}
+
+.title {
+	margin-inline: auto;
+	/* Без балансировки последняя строка остаётся из одного слова: заголовок
+	   короткий, и перенос по жадному алгоритму роняет вниз «order.». */
+	text-wrap: balance;
+	max-width: 22ch;
+	font-size: clamp(28px, 4vw, 44px);
+	line-height: 1.1;
+}
+
+.body {
+	margin: var(--s5) auto 0;
+	max-width: 48ch;
+	color: var(--dark-muted);
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--s3);
+	margin-top: var(--s7);
+}
+
+/* Призрачная кнопка на тёмном — та же кнопка, но её граница и подсветка
+   берутся из тёмного набора токенов. */
+.ghost {
+	color: var(--dark-fg);
+	border-color: var(--dark-line);
+}
+
+.ghost:hover {
+	background: #1c1917;
+}
+
+@media (max-width: 900px) {
+	.cta {
+		padding-block: var(--s8);
+	}
+}

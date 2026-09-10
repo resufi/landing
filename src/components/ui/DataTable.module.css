@@ -1,0 +1,46 @@
+.scroll {
+	overflow-x: auto;
+	margin-top: var(--s7);
+}
+
+.table {
+	border-collapse: collapse;
+	width: 100%;
+	min-width: 560px;
+	font-size: 14px;
+}
+
+.caption {
+	text-align: left;
+	padding: 0 0 var(--s3);
+	font-size: 13px;
+	color: var(--muted);
+}
+
+.table th,
+.table td {
+	text-align: left;
+	padding: var(--s3) var(--s4);
+	border-bottom: 1px solid var(--line);
+}
+
+.table th {
+	font-weight: 500;
+	font-size: 13px;
+	color: var(--muted);
+}
+
+.table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+/* Селектор нарочно с .table: у ячеек уже стоит text-align: left от
+   `.table th, .table td`, и одинокий класс проигрывает ему по
+   специфичности — числа молча уезжают влево. */
+.table .numeric {
+	text-align: right;
+}
+
+.foot {
+	color: var(--muted);
+}

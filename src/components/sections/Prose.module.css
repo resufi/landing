@@ -1,0 +1,17 @@
+/* Абзацы внутри секций. Отдельный модуль, потому что нужен четырём секциям
+   и ничем, кроме ширины строки и отступа, не отличается. */
+
+.p {
+	margin: var(--s4) 0 0;
+	max-width: 62ch;
+}
+
+.pMuted {
+	composes: p;
+	color: var(--muted);
+}
+
+.pSmall {
+	composes: pMuted;
+	font-size: 13px;
+}

@@ -1,0 +1,82 @@
+.road {
+	list-style: none;
+	margin: var(--s7) 0 0;
+	padding: 0;
+}
+
+.item {
+	position: relative;
+	padding: 0 0 var(--s7) var(--s6);
+}
+
+.item:last-child {
+	padding-bottom: 0;
+}
+
+/* Линия не сплошным бордюром на всём списке, а отрезком от каждой точки к
+   следующей. Бордюр начинался у верхнего края списка и потому торчал над
+   первой точкой, а внизу тянулся до конца последнего абзаца — в обе стороны
+   в пустоту. Отрезок идёт от нижнего края точки (6px + 9px) до верхнего края
+   следующей (6px в следующем пункте), поэтому под самими точками линии нет и
+   перекрывать их нечем. */
+.item:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	left: -1px;
+	top: 15px;
+	bottom: -6px;
+	width: 1px;
+	background: var(--line);
+}
+
+/* Точка на линии. Заливка — сделано, сиреневая — делается сейчас,
+   пустая с бледной обводкой — впереди. */
+.item::before {
+	content: "";
+	position: absolute;
+	left: -5px;
+	top: 6px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: var(--bg);
+	border: 1px solid var(--fg);
+}
+
+.item[data-stage="done"]::before {
+	background: var(--fg);
+}
+
+.item[data-stage="now"]::before {
+	background: var(--brand);
+	border-color: var(--brand);
+}
+
+.item[data-stage="next"]::before {
+	border-color: var(--line);
+}
+
+.when {
+	margin: 0;
+	font-family: var(--mono);
+	font-size: 12px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.item[data-stage="now"] .when {
+	color: var(--brand);
+}
+
+.title {
+	margin-top: var(--s2);
+	font-size: 18px;
+}
+
+.body {
+	margin: var(--s3) 0 0;
+	max-width: 56ch;
+	font-size: 14px;
+	color: var(--muted);
+}

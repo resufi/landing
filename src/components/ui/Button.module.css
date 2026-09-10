@@ -1,0 +1,47 @@
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--s2);
+	border-radius: var(--radius-btn);
+	border: 1px solid transparent;
+	text-decoration: none;
+	font-weight: 500;
+	white-space: nowrap;
+	transition:
+		filter 0.15s ease,
+		background-color 0.15s ease,
+		transform 0.15s ease;
+}
+
+.btn:active {
+	transform: translateY(1px);
+}
+
+.solid {
+	background: var(--brand);
+	color: var(--brand-fg);
+}
+
+.solid:hover {
+	filter: brightness(1.06);
+}
+
+.ghost {
+	background: transparent;
+	color: var(--fg);
+	border-color: var(--line);
+}
+
+.ghost:hover {
+	background: var(--raise);
+}
+
+.md {
+	padding: 10px var(--s4);
+	font-size: 14px;
+}
+
+.lg {
+	padding: 14px var(--s5);
+	font-size: 15px;
+}
