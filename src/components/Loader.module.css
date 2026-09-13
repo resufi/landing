@@ -8,6 +8,8 @@
 	background: var(--bg);
 	z-index: 100;
 	transition: opacity 0.5s ease;
+	touch-action: none;
+	overscroll-behavior: contain;
 }
 
 .leaving {
@@ -44,8 +46,6 @@
 	}
 }
 
-/* Настройку «меньше движения» уважаем там, где можем: у SMIL внутри <img>
-   этого рычага нет, а у подписи есть — она показывается сразу и целиком. */
 @media (prefers-reduced-motion: reduce) {
 	.char {
 		opacity: 1;

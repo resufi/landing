@@ -1,7 +1,6 @@
 import { Section } from "../ui/Section";
 import css from "./Prose.module.css";
 
-/** Вторая сторона протокола: продажа покрытия и то, чем оно доказывается. */
 export function Insurance() {
 	return (
 		<Section

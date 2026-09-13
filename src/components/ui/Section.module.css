@@ -9,7 +9,6 @@
 	padding-inline: var(--s5);
 }
 
-/* Тёмная полоса сама себе граница — линия сверху на ней не видна и не нужна. */
 .dark {
 	background: var(--dark-bg);
 	color: var(--dark-fg);

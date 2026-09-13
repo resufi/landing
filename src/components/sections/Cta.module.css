@@ -13,8 +13,6 @@
 
 .title {
 	margin-inline: auto;
-	/* Без балансировки последняя строка остаётся из одного слова: заголовок
-	   короткий, и перенос по жадному алгоритму роняет вниз «order.». */
 	text-wrap: balance;
 	max-width: 22ch;
 	font-size: clamp(28px, 4vw, 44px);
@@ -35,8 +33,6 @@
 	margin-top: var(--s7);
 }
 
-/* Призрачная кнопка на тёмном — та же кнопка, но её граница и подсветка
-   берутся из тёмного набора токенов. */
 .ghost {
 	color: var(--dark-fg);
 	border-color: var(--dark-line);

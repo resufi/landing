@@ -3,10 +3,6 @@ import { TRANCHES } from "@/content/tranches";
 import { Button } from "../ui/Button";
 import css from "./Hero.module.css";
 
-/**
- * Первый экран. Одна мысль, одно действие и очередь из трёх полос под ними:
- * продукт объясняется быстрее картинкой, чем абзацем.
- */
 export function Hero() {
 	return (
 		<section id="top" className={css.hero}>

@@ -6,11 +6,6 @@ import { APP_URL, asset } from "@/lib/config";
 import { Button } from "./ui/Button";
 import css from "./Header.module.css";
 
-/**
- * Шапка. Единственная причина, по которой она клиентская, — линия снизу:
- * она появляется, только когда под шапкой что-то уехало. На самом верху
- * страницы эта линия делила бы пустоту.
- */
 export function Header() {
 	const [stuck, setStuck] = useState(false);
 
@@ -25,8 +20,7 @@ export function Header() {
 		<header className={`${css.header} ${stuck ? css.stuck : ""}`}>
 			<div className={css.inner}>
 				<a className={css.brand} href="#top">
-					{/* eslint-disable-next-line @next/next/no-img-element -- статический
-					    SVG фиксированного размера: оптимизировать нечего. */}
+					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img src={asset("/flower-logo-light.svg")} alt="" width={28} height={28} />
 					Resu
 				</a>

@@ -16,7 +16,6 @@ const COLUMNS: readonly Column<Row>[] = [
 	{ key: "resu", header: "Resu", numeric: true, cell: (r) => r.resu },
 ];
 
-/** Изъян, общий для всего ликвидного стейкинга, и откуда у нас берутся деньги. */
 export function Flaw() {
 	return (
 		<Section

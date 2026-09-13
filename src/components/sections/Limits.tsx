@@ -2,10 +2,6 @@ import { LIMITS } from "@/content/limits";
 import { Section } from "../ui/Section";
 import css from "./Limits.module.css";
 
-/**
- * Границы. Список нарочно плоский, без карточек: обещания в рамочках
- * читаются как достоинства, а это не они.
- */
 export function Limits() {
 	return (
 		<Section

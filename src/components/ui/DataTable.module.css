@@ -34,9 +34,6 @@
 	border-bottom: 0;
 }
 
-/* Селектор нарочно с .table: у ячеек уже стоит text-align: left от
-   `.table th, .table td`, и одинокий класс проигрывает ему по
-   специфичности — числа молча уезжают влево. */
 .table .numeric {
 	text-align: right;
 }
