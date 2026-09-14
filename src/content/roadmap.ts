@@ -37,20 +37,11 @@ export const ROADMAP: readonly Milestone[] = [
 	{
 		stage: "next",
 		when: "Next",
-		title: "Oracle coverage, sold to the first counterparty",
+		title: "More chains, same arithmetic",
 		body:
-			"Double-signature proof against Pyth, live policies, premiums flowing to " +
-			"junior. First candidate is Syde — our own protocol, because we would " +
-			"rather test on ourselves.",
-	},
-	{
-		stage: "next",
-		when: "Next",
-		title: "Capital locked under active policies",
-		body:
-			"Today the three-day exit window slows depositors leaving from under " +
-			"sold coverage but does not forbid it. The real fix — locking the " +
-			"backing capital — is named in our limits, and it is next.",
+			"The mechanism is arithmetic, and arithmetic ports anywhere there is a " +
+			"liquid staking token to build on. TON is live and Solana is in testing; " +
+			"each new chain after them is a deployment, not a redesign.",
 	},
 	{
 		stage: "next",
@@ -58,8 +49,8 @@ export const ROADMAP: readonly Milestone[] = [
 		title: "Revenue for the protocol",
 		body:
 			"Today there is not a single protocol fee in the contracts: 100% of the " +
-			"protection fee moves between depositors, 100% of premiums go to the " +
-			"pool. When the time comes, the fairest cut is a share of premiums — " +
-			"paid for work actually done, not for holding coins.",
+			"protection fee moves between depositors and none of it reaches us. When " +
+			"the time comes, the fairest cut is a share of that fee — paid for work " +
+			"actually done, not for holding coins.",
 	},
 ];

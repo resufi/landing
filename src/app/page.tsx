@@ -4,7 +4,6 @@ import { Loader } from "@/components/Loader";
 import { Cta } from "@/components/sections/Cta";
 import { Flaw } from "@/components/sections/Flaw";
 import { Hero } from "@/components/sections/Hero";
-import { Insurance } from "@/components/sections/Insurance";
 import { Limits } from "@/components/sections/Limits";
 import { Roadmap } from "@/components/sections/Roadmap";
 import { Stats } from "@/components/sections/Stats";
@@ -27,9 +26,6 @@ export default function Page() {
 				</Reveal>
 				<Reveal>
 					<Tranches />
-				</Reveal>
-				<Reveal>
-					<Insurance />
 				</Reveal>
 				<Reveal>
 					<Roadmap />

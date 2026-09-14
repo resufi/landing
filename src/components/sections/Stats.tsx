@@ -1,21 +1,14 @@
-import { STATS, STATS_NOTE } from "@/content/stats";
+import { statsFrom } from "@/content/stats";
+import { fetchStats } from "@/lib/onchain";
 import { Section } from "../ui/Section";
-import css from "./Stats.module.css";
+import { StatsGrid } from "./StatsGrid";
 
-export function Stats() {
+export async function Stats() {
+	const data = await fetchStats(process.env.TONCENTER_API_KEY);
+
 	return (
 		<Section kicker="Protocol at a glance" tone="dark">
-			<dl className={css.grid}>
-				{STATS.map((s) => (
-					<div key={s.id} className={css.cell}>
-						<dd className={`${css.value} num ${s.value ? "" : css.pending}`}>
-							{s.value ?? "—"}
-						</dd>
-						<dt className={css.label}>{s.label}</dt>
-					</div>
-				))}
-			</dl>
-			<p className={css.note}>{STATS_NOTE}</p>
+			<StatsGrid initial={statsFrom(data)} />
 		</Section>
 	);
 }

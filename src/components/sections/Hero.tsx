@@ -7,7 +7,7 @@ export function Hero() {
 	return (
 		<section id="top" className={css.hero}>
 			<div className={css.wrap}>
-				<p className={css.kicker}>Liquid staking on TON</p>
+				<p className={css.kicker}>Liquid staking on TON and Solana</p>
 				<h1 className={css.title}>Choose where you stand in the loss queue.</h1>
 				<p className={css.sub}>
 					Everywhere else a loss is split evenly — the cautious saver and the
@@ -26,7 +26,9 @@ export function Hero() {
 
 				<p className={css.note}>
 					No token of our own. No points. No promised APY — just ordinary staking
-					yield, divided differently.
+					yield, divided differently. Live on TON mainnet, running on Solana, and
+					the list will only grow: the mechanism is arithmetic, and arithmetic
+					ports anywhere there is a staking token to build on.
 				</p>
 
 				<ul className={css.queue} aria-label="Loss queue">

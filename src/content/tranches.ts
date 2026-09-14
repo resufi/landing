@@ -34,8 +34,20 @@ export const YIELD_ROWS = [
 	{ tranche: "Junior", staking: "+4.5%", fee: "+5.8%", net: "+10.3%" },
 ] as const;
 
-export const COMPARE_ROWS = [
+export interface CompareRow {
+	who: string;
+	ordinary: string;
+	resu: string;
+}
+
+export const QUIET_ROWS: readonly CompareRow[] = [
+	{ who: "Yield chaser · junior", ordinary: "+4.5%", resu: "+10.3%" },
+	{ who: "Balanced · middle", ordinary: "+4.5%", resu: "+4.7%" },
+	{ who: "Cautious · senior", ordinary: "+4.5%", resu: "+2.5%" },
+];
+
+export const LOSS_ROWS: readonly CompareRow[] = [
 	{ who: "Yield chaser · junior", ordinary: "−5.0%", resu: "−25.0%" },
 	{ who: "Balanced · middle", ordinary: "−5.0%", resu: "0.0%" },
 	{ who: "Cautious · senior", ordinary: "−5.0%", resu: "0.0%" },
-] as const;
+];

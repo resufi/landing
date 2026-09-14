@@ -33,6 +33,11 @@ jobs:
       - name: Build
         env:
           BASE_PATH: /${{ github.event.repository.name }}
+          # Необязательный. Без него toncenter отдаёт примерно запрос в
+          # секунду, и сборка ждёт лишние секунды; с ним — сразу. Пустой
+          # секрет безопасен: цифры прочитаются и так.
+          # В бандл не попадает — читается только на сборке.
+          TONCENTER_API_KEY: ${{ secrets.TONCENTER_API_KEY }}
         run: npm run build
 
       - uses: actions/upload-pages-artifact@v3

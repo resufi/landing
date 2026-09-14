@@ -47,3 +47,20 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+.hint {
+	margin: var(--s1) 0 0;
+	font-size: 12px;
+	color: var(--dark-muted);
+	opacity: 0.7;
+}
+
+.link {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.link:hover {
+	opacity: 0.7;
+}

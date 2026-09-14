@@ -7,7 +7,7 @@ export function Limits() {
 		<Section
 			kicker="What we do not promise"
 			title="This section matters more than the one above it."
-			lead="If we are honest here, the rest can be believed. Where others show an APY, we show the edges."
+			lead="Staking today offers one risk profile and no choice about it — the same on every chain. We are adding the layer that was missing: a queue you pick your place in. It is new, so the honest thing is to show its edges before its APY."
 		>
 			<dl className={css.list}>
 				{LIMITS.map((l) => (
