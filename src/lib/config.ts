@@ -5,7 +5,7 @@ export const TAGLINE = "Resu — results first, everything else later.";
 
 export const DESCRIPTION =
 	"Liquid staking with a known loss limit, on TON and Solana. Pick a tranche: " +
-	"junior absorbs the first loss, senior is protected by arithmetic, not by " +
+	"buffer absorbs the first loss, shield is protected by arithmetic, not by " +
 	"promises.";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";

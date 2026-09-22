@@ -32,7 +32,7 @@ export const ROADMAP: readonly Milestone[] = [
 		body:
 			"External review of the contracts, then the first real pool with " +
 			"deliberately small caps. The question the launch answers: will anyone " +
-			"buy senior at 2% a year.",
+			"buy shield at 2% a year.",
 	},
 	{
 		stage: "next",
