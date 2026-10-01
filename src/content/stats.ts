@@ -17,13 +17,21 @@ function amount(value: bigint | null): string | undefined {
 	return `${Number(n.toFixed(2))} ${TON.assetSymbol}`;
 }
 
+/** Доллары (USDT-эквивалент), суммарно по всем сетям. */
+function usd(value: number | null): string | undefined {
+	if (value === null) return undefined;
+	if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
+	if (value >= 1000) return `$${(value / 1000).toFixed(1)}K`;
+	return `$${Number(value.toFixed(2))}`;
+}
+
 export function statsFrom(data: OnchainStats): readonly Stat[] {
 	return [
 		{
 			id: "tvl",
 			label: "Total value locked",
-			value: amount(data.tvl),
-			hint: "TON mainnet",
+			value: usd(data.tvlUsd),
+			hint: "all chains, in USDT",
 		},
 		{
 			id: "depositors",
