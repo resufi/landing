@@ -4,7 +4,7 @@ export const GITHUB_URL = "https://github.com/resufi";
 export const TAGLINE = "Resu — results first, everything else later.";
 
 export const DESCRIPTION =
-	"Liquid staking with a known loss limit, on TON and Solana. Pick a tranche: " +
+	"Risk-curated staking across EVM and non-EVM chains. Pick a tranche: " +
 	"buffer absorbs the first loss, shield is protected by arithmetic, not by " +
 	"promises.";
 

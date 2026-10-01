@@ -35,13 +35,13 @@ export const ROADMAP: readonly Milestone[] = [
 			"buy shield at 2% a year.",
 	},
 	{
-		stage: "next",
-		when: "Next",
+		stage: "done",
+		when: "Shipped",
 		title: "More chains, same arithmetic",
 		body:
-			"The mechanism is arithmetic, and arithmetic ports anywhere there is a " +
-			"liquid staking token to build on. TON is live and Solana is in testing; " +
-			"each new chain after them is a deployment, not a redesign.",
+			"The mechanism is arithmetic, so each chain is a deployment, not a " +
+			"redesign. Live on six chains — TON, Solana, HyperEVM, Robinhood, " +
+			"Arbitrum and Base — EVM and non-EVM alike.",
 	},
 	{
 		stage: "next",
