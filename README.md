@@ -1,85 +1,86 @@
 # Resu — landing
 
-Страница-витрина, ведущая в приложение <https://resufi.github.io/fe/>.
+The showcase page leading into the app <https://resufi.github.io/fe/>.
 
-## Стек
+## Stack
 
-| Что | Чем | Почему именно так |
+| What | With | Why this way |
 | --- | --- | --- |
-| Каркас | Next.js 15, App Router | Статический экспорт из коробки, метаданные типизированы, разметка рендерится на сборке — страница видна и без JS |
-| Язык | TypeScript, `strict` | Плюс `noUncheckedIndexedAccess` и `noUnusedLocals`: контент здесь — типизированные данные, и опечатка в нём должна падать на сборке |
-| Стили | CSS Modules + один файл токенов | Ровно как в приложении. Токены и есть дизайн-система; Tailwind дублировал бы её вторым словарём |
-| Шрифты | системный стек | Как в приложении. Ни одного сетевого запроса за шрифтом |
-| Раздача | `output: "export"` → GitHub Pages | Лендинг — это текст. Сервер ему не нужен, а статика с CDN не падает |
-| Проверки | `tsc --noEmit`, `eslint-config-next` | Гоняются и локально, и в CI перед публикацией |
+| Framework | Next.js 15, App Router | Static export out of the box, typed metadata, markup rendered at build time — the page is visible even without JS |
+| Language | TypeScript, `strict` | Plus `noUncheckedIndexedAccess` and `noUnusedLocals`: content here is typed data, and a typo in it should fail at build |
+| Styles | CSS Modules + one tokens file | Exactly as in the app. The tokens are the design system; Tailwind would duplicate it with a second vocabulary |
+| Fonts | system stack | As in the app. Not a single network request for a font |
+| Hosting | `output: "export"` → GitHub Pages | A landing is text. It needs no server, and static on a CDN doesn't go down |
+| Checks | `tsc --noEmit`, `eslint-config-next` | Run both locally and in CI before publishing |
 
-Зависимостей в рантайме три: `next`, `react`, `react-dom`. Ни UI-китов, ни
-библиотек анимации — на странице их нечем оправдать.
+Three runtime dependencies: `next`, `react`, `react-dom`. No UI kits, no
+animation libraries — nothing on the page justifies them.
 
-## Команды
+## Commands
 
 ```bash
-npm run dev        # разработка, localhost:3000
-npm run build      # статический экспорт в out/
-npm run start      # посмотреть собранное
-npm run check      # типы + линт + сборка, то же что в CI
+npm run dev        # development, localhost:3000
+npm run build      # static export to out/
+npm run start      # preview the build
+npm run check      # types + lint + build, same as CI
 ```
 
-## Архитектура
+## Architecture
 
 ```
 src/
   app/
-    layout.tsx        метаданные, og-карточка, подключение токенов
-    page.tsx          порядок секций — и больше ничего
-    globals.css       токены, сброс, три утилитных класса
+    layout.tsx        metadata, og card, token import
+    page.tsx          section order — and nothing else
+    globals.css       tokens, reset, three utility classes
   components/
-    Loader.tsx        заставка
-    Header.tsx        шапка
+    Loader.tsx        splash
+    Header.tsx        header
     Footer.tsx
-    ui/               примитивы: Button, Section, DataTable, Reveal
-    sections/         по файлу на секцию страницы
-  content/            тексты и числа отдельными типизированными модулями
-  lib/config.ts       внешние адреса, девиз, префикс путей
-public/               два SVG знака марки
+    ui/               primitives: Button, Section, DataTable, Reveal
+    sections/         one file per page section
+  content/            texts and numbers as separate typed modules
+  lib/config.ts       external addresses, tagline, path prefix
+public/               two SVG brand marks
 ```
 
-Правило одно и держит всю структуру: **разметка не знает содержания**. Цифры,
-роадмап, границы и тексты траншей лежат в `src/content/` как типизированные
-данные, и правка формулировки или добавление пункта роадмапа не требует
-трогать JSX. Стиль живёт в `*.module.css` рядом со своим компонентом,
-глобальный CSS ровно один — то же правило, что в `fe`.
+One rule holds the whole structure together: **the markup doesn't know the
+content**. Numbers, roadmap, limits and tranche texts live in `src/content/` as
+typed data, and editing a phrase or adding a roadmap item needs no JSX changes.
+Style lives in `*.module.css` next to its component; there is exactly one global
+CSS file — the same rule as in `fe`.
 
-Клиентских компонентов три: `Loader`, `Header` и `Reveal`. У каждого в шапке
-файла написано, почему он не может быть серверным. Всё остальное рендерится
-на сборке.
+There are three client components: `Loader`, `Header` and `Reveal`. Each has a
+header comment explaining why it can't be a server component. Everything else
+renders at build time.
 
-## Связь с приложением
+## Link to the app
 
-Палитра, шкала отступов и типографика скопированы из `fe/src/styles/tokens.css`
-без изменений. Заставка повторяет `fe/src/components/Loader.tsx`: тот же знак
-с SMIL-анимацией внутри SVG, та же подпись, набирающаяся по букве, те же
-тайминги. Переход с лендинга в приложение не должен читаться как переход на
-другой продукт.
+The palette, spacing scale and typography are copied from
+`fe/src/styles/tokens.css` unchanged. The splash mirrors
+`fe/src/components/Loader.tsx`: the same mark with SMIL animation inside the SVG,
+the same caption typed out letter by letter, the same timings. Moving from the
+landing into the app shouldn't read like moving to a different product.
 
-Добавлено сверх приложения только тёмное перекрытие (`--dark-*`) — оно
-используется дважды, под блок цифр и финальный призыв.
+The only thing added on top of the app is a dark overlay (`--dark-*`) — used
+twice, under the numbers block and the final call to action.
 
-## Блок цифр
+## Numbers block
 
-`src/content/stats.ts`. Поле `value` необязательно намеренно: до запуска у нас
-нет ни одной настоящей цифры, и прочерк — единственное, что здесь можно
-написать честно. Чтобы заполнить, добавьте `value` нужной строке — прочерк и
-приглушённый цвет снимутся сами, разметку трогать не нужно.
+`src/content/stats.ts`. The `value` field is optional on purpose: before launch
+we have no real numbers, and a dash is the only thing we can write honestly here.
+To fill one in, add `value` to that row — the dash and the muted color lift on
+their own, with no markup changes.
 
-## Публикация
+## Publishing
 
-`.github/workflows/pages.yml` собирает и публикует при пуше в `main`.
-`BASE_PATH` подставляет сборка из имени репозитория, чтобы оно не было зашито
-в код — тем же способом, что в `fe`.
+`.github/workflows/pages.yml` builds and publishes on a push to `main`.
+`BASE_PATH` is injected by the build from the repo name, so it isn't hardcoded —
+the same approach as in `fe`.
 
-## Содержание
+## Content
 
-Тексты — сжатый пересказ `ECONOMICS.txt` на английском, потому что интерфейс
-приложения английский. Раздел «What we do not promise» оставлен предпоследним
-и полным: он и есть главное отличие от соседей по рынку.
+The texts are a condensed retelling of `ECONOMICS.txt` in English, because the
+app's interface is English. The "What we do not promise" section is kept
+second-to-last and complete: it is the main difference from our neighbors on the
+market.

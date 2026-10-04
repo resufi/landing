@@ -6,7 +6,7 @@ const TIMEOUT_MS = 8000;
 
 export interface OnchainStats {
 	tvl: bigint | null;
-	/** Суммарный TVL по всем пулам в долларах (USDT-эквивалент). */
+	/** Total TVL across all pools in dollars (USDT-equivalent). */
 	tvlUsd: number | null;
 	depositors: number | null;
 	losses: bigint | null;
@@ -22,8 +22,8 @@ const EMPTY: OnchainStats = {
 };
 
 /**
- * Пулы на EVM-сетях. nav() у OracleVault уже возвращает wad USD (1e18),
- * поэтому их стоимость складывается в доллары напрямую, без котировок.
+ * Pools on EVM chains. OracleVault's nav() already returns wad USD (1e18),
+ * so their value sums into dollars directly, without quotes.
  */
 const NAV_SELECTOR = "0xc1590cd7"; // nav()
 const EVM_VAULTS: { rpc: string; vault: string }[] = [
@@ -34,7 +34,7 @@ const EVM_VAULTS: { rpc: string; vault: string }[] = [
 	{ rpc: "https://mainnet.base.org", vault: "0xb555F9D5eF631868cF070Fe3466765E26502693A" }, // NVDA
 ];
 
-/** Второй TON-пул: tsUSDe (6 знаков, стейбл ≈ $1). */
+/** The second TON pool: tsUSDe (6 decimals, a stablecoin ≈ $1). */
 const STABLE_VAULT = "EQC-EijLoFEAy-pMuvxjlRtQ4yqmKO62ZnptY0J3VvAgVwdE";
 const STABLE_ASSET = "EQDQ5UUyPHrLcQJlPAczd_fjxn8SLrlNQwolBznxCdSlfQwr";
 
@@ -60,7 +60,7 @@ async function readEvmNav(rpc: string, vault: string): Promise<bigint> {
 	}
 }
 
-/** Цена TON в долларах. tsTON привязан к TON примерно один к одному. */
+/** TON price in dollars. tsTON tracks TON roughly one-to-one. */
 async function tonUsd(): Promise<number | null> {
 	try {
 		const res = await fetch(
@@ -213,9 +213,9 @@ export async function fetchStats(
 		depositors = await readDepositors(apiKey, pause);
 	}
 
-	// Суммарный TVL в долларах по всем пулам: tsTON × цена TON, tsUSDe ≈ $1,
-	// и nav() каждого EVM-вольта (уже в wad USD). EVM и котировки — другие
-	// хосты, лимит toncenter на них не распространяется.
+	// Total TVL in dollars across all pools: tsTON × TON price, tsUSDe ≈ $1,
+	// and each EVM vault's nav() (already wad USD). EVM and price quotes are other
+	// hosts; the toncenter limit doesn't apply to them.
 	let tvlUsd: number | null = null;
 	{
 		let usd = 0;
