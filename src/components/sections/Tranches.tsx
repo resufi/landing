@@ -21,7 +21,7 @@ export function Tranches() {
 			lead="Money inside the pool flows top down — from the protected to the protector. Senior pays 2% a year of its own deposit; junior receives it; middle sits between, collecting a little because it is second in line rather than out of line."
 		>
 			<DataTable
-				caption="A year with nothing going wrong, base staking taken as 4.5% and an even 20/20/60 buffer/balance/shield split for the example. Live pools show their own figures, computed from the real split of deposits."
+				caption="A year with nothing going wrong, base staking taken as 4.5% and an even 20/20/60 junior/middle/senior split for the example. Live pools show their own figures, computed from the real split of deposits."
 				columns={COLUMNS}
 				rows={YIELD_ROWS}
 			/>
@@ -35,7 +35,7 @@ export function Tranches() {
 			<p className={prose.p}>
 				On price-based pools — tokenized stocks and WETH on our EVM chains — the
 				model flips. The asset earns nothing on its own, so the value comes from
-				price: shield takes a fixed coupon, balance a smaller one, and buffer the
+				price: senior takes a fixed coupon, middle a smaller one, and junior the
 				leveraged price move, with its downside still capped at its own stake.
 				Same loss queue, the yield just comes from a different place.
 			</p>
