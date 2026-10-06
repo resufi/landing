@@ -19,8 +19,14 @@
 
 .mark {
 	width: 96px;
-	height: auto;
 	display: block;
+}
+
+/* The mark is inline markup now — the wrapper sets its size. */
+.mark svg {
+	display: block;
+	width: 100%;
+	height: auto;
 }
 
 .sign {
