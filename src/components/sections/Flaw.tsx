@@ -29,22 +29,22 @@ export function Flaw() {
 			/>
 
 			<p className={css.p}>
-				Buffer more than doubles the plain staking rate — not from a new token
-				and not from someone else&rsquo;s deposit, but because shield pays for
+				Junior more than doubles the plain staking rate — not from a new token
+				and not from someone else&rsquo;s deposit, but because senior pays for
 				the right to stand behind it. That payment is the whole product, and it
 				arrives every single year.
 			</p>
 
 			<DataTable
-				caption="The year it goes wrong: a 500-coin loss on a 10,000-coin pool (buffer 2,000 · balance 2,000 · shield 6,000)."
+				caption="The year it goes wrong: a 500-coin loss on a 10,000-coin pool (junior 2,000 · middle 2,000 · senior 6,000)."
 				columns={COLUMNS}
 				rows={LOSS_ROWS}
 			/>
 
 			<p className={css.p}>
-				This is the bill for the line above, and buffer pays it in full while
+				This is the bill for the line above, and junior pays it in full while
 				the other two are untouched. The loss is shown on its own — the year
-				also carried buffer&rsquo;s +10.3%, so the two net out to roughly −15%.
+				also carried junior&rsquo;s +10.3%, so the two net out to roughly −15%.
 				Ordinary staking hands everyone −5% and never offered the choice.
 			</p>
 

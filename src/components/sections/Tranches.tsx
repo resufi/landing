@@ -18,7 +18,7 @@ export function Tranches() {
 			id="tranches"
 			kicker="Three seats in one queue"
 			title="Whoever takes on someone else’s risk gets paid for it."
-			lead="Money inside the pool flows top down — from the protected to the protector. Shield pays 2% a year of its own deposit; buffer receives it; balance sits between, collecting a little because it is second in line rather than out of line."
+			lead="Money inside the pool flows top down — from the protected to the protector. Senior pays 2% a year of its own deposit; junior receives it; middle sits between, collecting a little because it is second in line rather than out of line."
 		>
 			<DataTable
 				caption="A year with nothing going wrong, base staking taken as 4.5% and an even 20/20/60 buffer/balance/shield split for the example. Live pools show their own figures, computed from the real split of deposits."
@@ -27,7 +27,7 @@ export function Tranches() {
 			/>
 
 			<p className={prose.p}>
-				Shield earns less than plain staking. That is not a defect — it is the
+				Senior earns less than plain staking. That is not a defect — it is the
 				price of insurance, and we do not yet know whether people will pay it.
 				That is exactly what the launch is for.
 			</p>

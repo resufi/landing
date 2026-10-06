@@ -19,9 +19,9 @@ export const LIMITS: readonly Limit[] = [
 			"it. The queue orders losses inside the pool, not the price outside it.",
 	},
 	{
-		title: "Buffer can lose everything",
+		title: "Junior can lose everything",
 		body:
-			'Not an "aggressive strategy" — literally: in a large incident buffer goes ' +
+			'Not an "aggressive strategy" — literally: in a large incident junior goes ' +
 			"to zero first and completely. The higher yield is payment for exactly that.",
 	},
 	{
