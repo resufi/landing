@@ -7,11 +7,11 @@ export function Cta() {
 		<section className={css.cta}>
 			<div className={css.wrap}>
 				<h2 className={css.title}>
-					Staking where you choose what you lose, and in what order.
+					Choose your risk on any asset — and get paid for the risk you take.
 				</h2>
 				<p className={css.body}>
 					The mechanics work and are covered by tests. The open question is
-					whether anyone wants them. Try the pool and tell us.
+					whether anyone wants them. Try the app and tell us.
 				</p>
 				<div className={css.actions}>
 					<Button href={APP_URL} external size="lg">

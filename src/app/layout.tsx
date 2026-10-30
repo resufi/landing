@@ -3,7 +3,7 @@ import { asset, DESCRIPTION, TAGLINE } from "@/lib/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Resu — staking with a chosen risk tier",
+	title: "Resu — choose your risk on any asset",
 	description: DESCRIPTION,
 	icons: {
 		icon: [

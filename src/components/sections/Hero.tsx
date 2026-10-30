@@ -7,12 +7,12 @@ export function Hero() {
 	return (
 		<section id="top" className={css.hero}>
 			<div className={css.wrap}>
-				<p className={css.kicker}>Risk-curated staking on EVM and non-EVM chains</p>
-				<h1 className={css.title}>Choose where you stand in the loss queue.</h1>
+				<p className={css.kicker}>On-chain risk tiers for real-world assets — and ETH, staking tokens and more</p>
+				<h1 className={css.title}>Choose your risk on any asset.</h1>
 				<p className={css.sub}>
-					Everywhere else a loss is split evenly — the cautious saver and the
-					yield chaser lose the same 10%. Resu changes exactly one thing, and it
-					changes everything.
+					Everywhere else a gain and a loss are shared evenly — the cautious
+					saver and the yield chaser get the same number. Resu lets each pick a
+					tier instead: protected and steady, or aggressive and high-upside.
 				</p>
 
 				<div className={css.cta}>
@@ -25,10 +25,11 @@ export function Hero() {
 				</div>
 
 				<p className={css.note}>
-					No token of our own. No points. No promised APY — just ordinary staking
-					yield, divided differently. Live across six chains, EVM and non-EVM, and
-					the list will only grow: the mechanism is arithmetic, and arithmetic
-					ports anywhere there is an asset to build on.
+					Built first for tokenized real-world assets — and just as at home with
+					ETH, staking tokens and yield-bearing stablecoins. Live across seven
+					chains, EVM and non-EVM, with an activity-points program toward the
+					future $RESU token. The mechanism is arithmetic, and it ports anywhere
+					there is an asset to build on.
 				</p>
 
 				<ul className={css.queue} aria-label="Loss queue">

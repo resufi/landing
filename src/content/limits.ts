@@ -5,36 +5,42 @@ export interface Limit {
 
 export const LIMITS: readonly Limit[] = [
 	{
-		title: "No specific rate",
+		title: "No single promised rate",
 		body:
-			"The base staking yield is not ours and we do not steer it. The interface " +
-			'says "−2% to base", not "3.7% a year". Any precise number would be a lie.',
+			"On price assets senior earns a fixed coupon, but junior's return rides " +
+			"the asset's price and nobody can promise that. On staking pools the base " +
+			"yield is not ours to steer. We show the mechanism and the live split, not " +
+			"a guaranteed APY — any precise number would be a lie.",
 	},
 	{
 		title: "Not protection from everything",
 		body:
-			"The ceiling is 30%. Beyond it, losses stay with depositors. We cover an " +
-			"ordinary disaster, not the end of the world. And not the market either: " +
-			"if the staking token falls against the dollar, every tranche falls with " +
-			"it. The queue orders losses inside the pool, not the price outside it.",
+			"The buffer is finite. A drawdown larger than junior plus middle reaches " +
+			"senior, and beyond the pool's cap the loss stays with depositors. And on " +
+			"staking pools, if the token falls against the dollar every tier falls " +
+			"with it: the queue orders losses inside the pool, not the price outside it.",
 	},
 	{
 		title: "Junior can lose everything",
 		body:
-			'Not an "aggressive strategy" — literally: in a large incident junior goes ' +
-			"to zero first and completely. The higher yield is payment for exactly that.",
+			'Not an "aggressive strategy" — literally: in a large drawdown junior goes ' +
+			"to zero first and completely. Its higher yield, and its leverage on price, " +
+			"are payment for exactly that.",
 	},
 	{
 		title: "We do not know the right price",
 		body:
-			"The 2% fee comes from general hack statistics and from the one working " +
-			"insurer in the industry. Nobody has priced graded staking risk before — " +
-			"there is no history to read it off, on any chain. The market will set it.",
+			"Nobody has priced graded on-chain risk before. The coupons and the 2% " +
+			"protection fee come from market comparables and the few working insurers " +
+			"in the industry — there is no long history to read them off. The market " +
+			"will set them.",
 	},
 	{
-		title: "The protocol has no revenue",
+		title: "The protocol takes little, for now",
 		body:
-			"There is no fee mechanism at all. That is deliberate and temporary — an " +
-			"extra fee now would only distort the answer we are trying to get.",
+			"Today almost all of the coupon and protection-fee flow moves between " +
+			"depositors, not to us — deliberately, so the launch answers one clean " +
+			"question first. A modest protocol share, and the $RESU token with its " +
+			"activity points, come later: paid for work done, not for holding coins.",
 	},
 ];
