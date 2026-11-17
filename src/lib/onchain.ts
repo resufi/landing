@@ -6,7 +6,6 @@ const TIMEOUT_MS = 8000;
 
 export interface OnchainStats {
 	tvl: bigint | null;
-	/** Total TVL across all pools in dollars (USDT-equivalent). */
 	tvlUsd: number | null;
 	depositors: number | null;
 	losses: bigint | null;
@@ -21,11 +20,7 @@ const EMPTY: OnchainStats = {
 	maxLossBps: null,
 };
 
-/**
- * Pools on EVM chains. OracleVault's nav() already returns wad USD (1e18),
- * so their value sums into dollars directly, without quotes.
- */
-const NAV_SELECTOR = "0xc1590cd7"; // nav()
+const NAV_SELECTOR = "0xc1590cd7";
 const EVM_VAULTS: { rpc: string; vault: string }[] = [
 	{ rpc: "https://rpc.hyperliquid.xyz/evm", vault: "0x53F7e94a0edd3CFb958332842ec1fEce566f941d" }, // HLP
 	{ rpc: "https://rpc.mainnet.chain.robinhood.com", vault: "0x5285F357Eb16E6fd40ba73fCA4F37776A3A5d129" }, // SPY
@@ -34,7 +29,6 @@ const EVM_VAULTS: { rpc: string; vault: string }[] = [
 	{ rpc: "https://mainnet.base.org", vault: "0xb555F9D5eF631868cF070Fe3466765E26502693A" }, // NVDA
 ];
 
-/** The second TON pool: tsUSDe (6 decimals, a stablecoin ≈ $1). */
 const STABLE_VAULT = "EQC-EijLoFEAy-pMuvxjlRtQ4yqmKO62ZnptY0J3VvAgVwdE";
 const STABLE_ASSET = "EQDQ5UUyPHrLcQJlPAczd_fjxn8SLrlNQwolBznxCdSlfQwr";
 
@@ -60,7 +54,6 @@ async function readEvmNav(rpc: string, vault: string): Promise<bigint> {
 	}
 }
 
-/** TON price in dollars. tsTON tracks TON roughly one-to-one. */
 async function tonUsd(): Promise<number | null> {
 	try {
 		const res = await fetch(
@@ -172,7 +165,7 @@ async function readDepositors(
 	return any ? owners.size : null;
 }
 
-export function normalize(address: string): string {
+function normalize(address: string): string {
 	if (address.includes(":")) return address.toLowerCase();
 
 	const bytes = decodeBase64(address.replace(/-/g, "+").replace(/_/g, "/"));
@@ -213,9 +206,6 @@ export async function fetchStats(
 		depositors = await readDepositors(apiKey, pause);
 	}
 
-	// Total TVL in dollars across all pools: tsTON × TON price, tsUSDe ≈ $1,
-	// and each EVM vault's nav() (already wad USD). EVM and price quotes are other
-	// hosts; the toncenter limit doesn't apply to them.
 	let tvlUsd: number | null = null;
 	{
 		let usd = 0;

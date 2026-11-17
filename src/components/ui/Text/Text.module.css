@@ -1,0 +1,37 @@
+.lead {
+	font-size: clamp(17px, 1.45vw, 20px);
+	line-height: 1.55;
+	color: var(--muted);
+	max-width: 44ch;
+}
+
+.body {
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--muted);
+	max-width: 62ch;
+	margin-top: 22px;
+}
+
+.body a {
+	color: var(--ink);
+	text-underline-offset: 3px;
+}
+
+.note {
+	font-size: 14px;
+	color: var(--muted);
+	margin: 46px 0 14px;
+}
+
+.fine {
+	font-size: 14px;
+	line-height: 1.55;
+	color: var(--muted);
+	margin-top: 28px;
+	max-width: 98ch;
+}
+
+.strong {
+	color: var(--ink);
+}

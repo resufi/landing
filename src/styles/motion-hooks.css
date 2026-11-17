@@ -1,0 +1,56 @@
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+	overflow: hidden;
+}
+
+.rv {
+	opacity: 0;
+	transform: translateY(22px);
+	transition:
+		opacity 0.9s var(--ease-out),
+		transform 0.9s var(--ease-out);
+}
+.rv.in {
+	opacity: 1;
+	transform: none;
+}
+
+.fx-ink {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.fx-thin {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 0.8;
+	stroke-linecap: round;
+}
+.fx-label {
+	font-family: var(--sans);
+	font-size: 12px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	fill: var(--soft);
+}
+.fx-num {
+	font-family: var(--sans);
+	font-size: 17px;
+	fill: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rv {
+		transition: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}

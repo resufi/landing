@@ -1,0 +1,100 @@
+.list {
+	margin-top: 60px;
+}
+
+.row {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+	gap: 40px;
+	padding: 26px 0 30px;
+}
+
+.last {
+	padding: 0;
+	height: 16px;
+}
+
+.crack {
+	position: absolute;
+	left: 0;
+	top: -8px;
+	width: 100%;
+	height: 16px;
+	overflow: visible;
+}
+
+.crack :global(path) {
+	fill: none;
+	vector-effect: non-scaling-stroke;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+}
+
+.crack :global(.ink) {
+	stroke: #b9b2a5;
+	stroke-width: 1;
+	transition: stroke-dashoffset 1.1s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.crack :global(.gold) {
+	stroke: var(--v2);
+	stroke-width: 2.2;
+	filter: drop-shadow(0 0 3px rgb(169 150 232 / 0.8));
+	transition: stroke-dashoffset 1.4s 0.55s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.crack :global(.twig) {
+	stroke: var(--v2);
+	stroke-width: 1.4;
+	transition: stroke-dashoffset 0.6s 1.6s ease-out;
+}
+
+.row:global(.in) .crack :global(path) {
+	stroke-dashoffset: 0;
+}
+
+.title {
+	font-weight: 400;
+	font-size: 20px;
+	letter-spacing: -0.005em;
+}
+
+.body {
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--muted);
+}
+
+.title,
+.body {
+	opacity: 0;
+	transform: translateY(10px);
+	transition:
+		opacity 0.8s 0.4s ease,
+		transform 0.8s 0.4s ease;
+}
+
+.row:global(.in) .title,
+.row:global(.in) .body {
+	opacity: 1;
+	transform: none;
+}
+
+@media (max-width: 860px) {
+	.row {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.title,
+	.body {
+		transition: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}

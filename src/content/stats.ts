@@ -17,7 +17,6 @@ function amount(value: bigint | null): string | undefined {
 	return `${Number(n.toFixed(2))} ${TON.assetSymbol}`;
 }
 
-/** Dollars (USDT-equivalent), summed across all chains. */
 function usd(value: number | null): string | undefined {
 	if (value === null) return undefined;
 	if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;

@@ -1,6 +1,6 @@
 export type Stage = "done" | "now" | "next";
 
-export interface Milestone {
+interface Milestone {
 	stage: Stage;
 	when: string;
 	title: string;

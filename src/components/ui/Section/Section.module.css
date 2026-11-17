@@ -1,0 +1,12 @@
+.section {
+	position: relative;
+	max-width: 1180px;
+	margin: 0 auto;
+	padding: 110px 46px 120px;
+}
+
+@media (max-width: 860px) {
+	.section {
+		padding: 80px 22px 90px;
+	}
+}

@@ -1,0 +1,25 @@
+.brush {
+	display: flex;
+	justify-content: center;
+	padding: 10px 0;
+}
+
+.brush svg {
+	width: 240px;
+	height: 12px;
+	overflow: visible;
+}
+
+.stroke {
+	fill: none;
+	stroke: url(#brushGrad);
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+	transition: stroke-dashoffset 1.6s var(--ease-brush);
+}
+
+.brush:global(.in) .stroke {
+	stroke-dashoffset: 0;
+}

@@ -1,6 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Manrope } from "next/font/google";
 import { asset, DESCRIPTION, TAGLINE } from "@/lib/config";
-import "./globals.css";
+import "@/styles/tokens.css";
+import "@/styles/base.css";
+import "@/styles/motion-hooks.css";
+
+const manrope = Manrope({
+	subsets: ["latin"],
+	variable: "--font-manrope",
+	display: "swap",
+});
 
 export const metadata: Metadata = {
 	title: "Resu — staking with a chosen risk tier",
@@ -23,7 +32,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
 	width: "device-width",
 	initialScale: 1,
-	themeColor: "#fbfbfa",
+	themeColor: "#f2eee6",
 };
 
 export default function RootLayout({
@@ -32,8 +41,17 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
-			<body>{children}</body>
+		<html lang="en" className={manrope.variable}>
+			<body>
+				<noscript>
+					<style>
+						{
+							"#intro{display:none}.rv,.rm,.kr *,.stat *{opacity:1!important;transform:none!important}.brush path,.kr path{stroke-dashoffset:0!important}#openApp{opacity:1!important}"
+						}
+					</style>
+				</noscript>
+				{children}
+			</body>
 		</html>
 	);
 }

@@ -1,0 +1,26 @@
+.heading {
+	font-weight: 300;
+	text-wrap: balance;
+}
+
+.big {
+	font-size: clamp(44px, 6vw, 80px);
+	line-height: 1.02;
+	letter-spacing: -0.025em;
+	margin: 22px 0 34px;
+	max-width: 11ch;
+}
+
+.mid {
+	font-size: clamp(34px, 4.2vw, 54px);
+	line-height: 1.08;
+	letter-spacing: -0.018em;
+	margin: 18px 0 26px;
+	max-width: 15ch;
+}
+
+.final {
+	font-size: clamp(32px, 3.8vw, 50px);
+	line-height: 1.1;
+	letter-spacing: -0.018em;
+}

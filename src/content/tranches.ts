@@ -1,4 +1,4 @@
-export type TrancheId = "junior" | "middle" | "senior";
+type TrancheId = "junior" | "middle" | "senior";
 
 export interface Tranche {
 	id: TrancheId;

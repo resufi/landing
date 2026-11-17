@@ -1,0 +1,76 @@
+.soil {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	overflow: visible;
+}
+
+.roots {
+	position: relative;
+	margin-top: 96px;
+	padding-left: 96px;
+}
+
+.rootsFx {
+	position: absolute;
+	left: 0;
+	top: -74px;
+	width: 96px;
+	height: calc(100% + 74px);
+	overflow: visible;
+	pointer-events: none;
+}
+
+.milestone {
+	position: relative;
+	padding: 4px 0 70px;
+	max-width: 560px;
+	opacity: 0.16;
+	transition: opacity 0.9s ease;
+}
+
+.milestone:global(.in) {
+	opacity: 1;
+}
+
+.milestone[data-s="later"]:global(.in) {
+	opacity: 0.72;
+}
+
+.when {
+	font-size: 11.5px;
+	letter-spacing: 0.3em;
+	text-transform: uppercase;
+	color: var(--soft);
+}
+
+.milestone[data-s="now"] .when {
+	color: var(--v3);
+}
+
+.title {
+	font-weight: 400;
+	font-size: 22px;
+	margin: 12px 0;
+	letter-spacing: -0.005em;
+}
+
+.body {
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--muted);
+}
+
+@media (max-width: 860px) {
+	.roots { padding-left: 64px; }
+	.rootsFx { width: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.milestone {
+		transition: none !important;
+		opacity: 1 !important;
+	}
+}
