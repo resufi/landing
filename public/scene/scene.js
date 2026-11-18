@@ -113,7 +113,7 @@ function layout() {
   }
   const ox = SAM.x * s, oy = (SAM.y - 35 - y0) * s;
   for (const z of zoomLayers) z.el.style.transformOrigin = `${f(ox)}px ${f(oy)}px`;
-  V = { s, y0, drift, rise: (1200 - SUN.y) * s };
+  V = { s, y0, drift, rise: (1200 - SUN.y) * s, ox, oy };
   if (!sunDone && !reduce.matches) sunWrap.style.transform = `translate3d(0,${V.rise.toFixed(2)}px,0)`;
   rasterize();
 }
@@ -207,7 +207,9 @@ function bez(c, t) {
 }
 function measureLine() {
   const vw = stage.clientWidth, vh = stage.clientHeight;
-  const sr = POSES[POSES.length - 1].getBoundingClientRect(), P = { x: sr.left + sr.width * .6, y: sr.top + sr.height * .45 };
+  const sr = POSES[POSES.length - 1].getBoundingClientRect(), st = stage.getBoundingClientRect();
+  const k = ZOOM / (1 + (ZOOM - 1) * (parseFloat(zLast) || 0));
+  const P = { x: V.ox + (sr.left - st.left + sr.width * .6 - V.ox) * k, y: V.oy + (sr.top - st.top + sr.height * .45 - V.oy) * k };
   const A = { x: -.12 * vw, y: P.y + .1 * vh }, B = { x: 1.12 * vw, y: -.04 * vh };
   const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy), n = { x: -dy / len, y: dx / len }, bulge = .2 * len;
   const C = [A, { x: A.x + dx * .45 + n.x * bulge, y: A.y + dy * .45 + n.y * bulge }, { x: A.x + dx * .92 + n.x * bulge * .9, y: A.y + dy * .92 + n.y * bulge * .9 }, B];
@@ -307,6 +309,12 @@ function setMask(d) {
   st.maskComposite = 'add, intersect, add';
   st.webkitMaskComposite = 'source-over, source-in, source-over';
 }
+let prepped = null, warm = null;
+function warmMask() {
+  if (!warm) { warm = document.createElement('div'); warm.setAttribute('aria-hidden', 'true');
+    warm.style.cssText = 'position:fixed;inset:0;pointer-events:none;opacity:.002;background:#000;z-index:-1;-webkit-mask-size:100% 100%;mask-size:100% 100%'; document.body.appendChild(warm); }
+  warm.style.webkitMaskImage = warm.style.maskImage = `${line.urlUp}, ${line.urlLow}`;
+}
 function clearMask() {
   const st = stage.style;
   st.webkitMaskImage = st.maskImage = ''; st.maskComposite = ''; st.webkitMaskComposite = ''; maskKey = '';
@@ -315,7 +323,9 @@ function clearMask() {
 function cutFrame(p) {
   if (p < PH.slash[0]) {
     if (line) { slash.style.opacity = 0; clearMask(); stage.style.transform = ''; stage.style.visibility = ''; cutShadow.style.opacity = cutEdge.style.opacity = 0; line = null; }
-  } else if (!line) { measureLine(); prepMask(); }
+  } else if (!line) { if (prepped) line = prepped; else { measureLine(); prepMask(); } }
+  if (!prepped && p >= PH.slash[0] - .12) { const was = line; measureLine(); prepMask(); warmMask(); prepped = line; line = was ? prepped : null; }
+  if (warm && p >= PH.dissolve[1]) { warm.remove(); warm = null; }
 
   sun.setAttribute('fill', mix('#c62824', LAV, smooth(0, 1, span('tint', p))));
   sun.style.opacity = (1 - smooth(.15, .7, span('dissolve', p))).toFixed(3);
@@ -381,7 +391,7 @@ function frame(now) {
   const k = still ? 1 : easeOut(clamp((t - RISE_DELAY) / RISE_DUR));
   if (k < 1 || !sunDone) { sunWrap.style.transform = `translate3d(0,${((1 - k) * V.rise).toFixed(2)}px,0)`; sunDone = k >= 1; }
 
-  if (prog === lastProg && !zLifted) { requestAnimationFrame(frame); return; }
+  if (prog === lastProg) { requestAnimationFrame(frame); return; }
   lastProg = prog;
   const hb = 1 - smooth(.002, .02, prog);
   scrollBadge.style.opacity = hb.toFixed(3); scrollBadge.style.visibility = hb > 0 ? '' : 'hidden';
@@ -393,14 +403,17 @@ function frame(now) {
     zLast = zKey; zMoved = now;
     if (!zLifted) { for (const L of zoomLayers) L.el.style.willChange = 'transform'; zLifted = true; }
     for (const L of zoomLayers) L.el.style.transform = `scale(${(1 + (ZOOM - 1) * L.k * z).toFixed(4)})`;
-  } else if (zLifted && now - zMoved > 260) {
-    for (const L of zoomLayers) L.el.style.willChange = ''; zLifted = false;
   }
   cutFrame(prog);
   requestAnimationFrame(frame);
 }
 
 layout();
-addEventListener('resize', () => { layout(); line = null; maskKey = ''; lastProg = -1; zLast = ''; });
+let stageSize = stage.clientWidth + 'x' + stage.clientHeight;
+addEventListener('resize', () => {
+  const sz = stage.clientWidth + 'x' + stage.clientHeight;
+  if (sz === stageSize) return; stageSize = sz;
+  layout(); line = null; prepped = null; maskKey = ''; lastProg = -1; zLast = '';
+});
 requestAnimationFrame(frame);
 })();

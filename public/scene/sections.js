@@ -405,7 +405,7 @@ function easeIO(x){ return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
 
 function layoutAll(){ layoutStats(); layoutRoots(); layoutFinal(); }
 addEventListener('load',layoutAll); document.fonts&&document.fonts.ready.then(layoutAll);
-let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(layoutAll,150); });
+let rt, lastW=innerWidth; addEventListener('resize',()=>{ if(innerWidth===lastW) return; lastW=innerWidth; clearTimeout(rt); rt=setTimeout(layoutAll,150); });
 layoutAll();
 const contentEl=$('#content'); let contentTop=0;
 const measureContent=()=>{ contentTop=contentEl.getBoundingClientRect().top+scrollY; };
