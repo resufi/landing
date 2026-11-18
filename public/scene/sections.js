@@ -278,6 +278,8 @@ function tapered(pts,w0,w1){ const n=pts.length, L=[],Rr=[];
   const e=pts[n-1]; return 'M'+L.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+`L${f1(e[0])} ${f1(e[1])}L`+Rr.reverse().map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z'; }
 function wander(x,y,ang,len,step,r,bend=.35,down=.04){ const pts=[[x,y]]; let a=ang;
   for(let d=0;d<len;d+=step){ a+=(r()-.5)*bend; a+=(Math.PI/2-a)*down; x+=Math.cos(a)*step; y+=Math.sin(a)*step; pts.push([x,y]); } return pts; }
+function dashSetup(m){ const L=m.getTotalLength()||1; m.L=L; m.setAttribute('stroke-dasharray',`${L.toFixed(1)} ${(L*3+40).toFixed(1)}`); draw(m,0); return m; }
+function draw(m,k){ m.style.strokeDashoffset=((1-k)*m.L).toFixed(1); m.style.visibility=k<=0?'hidden':''; }
 const polyline=p=>'M'+p.map(q=>f1(q[0])+' '+f1(q[1])).join('L');
 function layoutRoots(){
   rFx.innerHTML='';
@@ -290,7 +292,8 @@ function layoutRoots(){
   const defs=el('defs',{},rFx), mask=el('mask',{id:'rootMask',maskUnits:'userSpaceOnUse',x:-50,y:-50,width:RW+100,height:H+100},defs);
   const gFill=el('g',{mask:'url(#rootMask)'},rFx);
   const piece=(pts,w0,w1,opts={})=>{ const fill=el('path',{d:tapered(pts,w0,w1),fill:opts.col||INKc,opacity:opts.op??1},gFill);
-    const m=el('path',{d:polyline(pts),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',pathLength:1,'stroke-dasharray':'1 3','stroke-dashoffset':1},mask);
+    const m=el('path',{d:polyline(pts),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',},mask);
+    dashSetup(m);
     if(opts.tr) m.style.transition=opts.tr; return {fill,m,y:pts[0][1]}; };
   const xAt=y=>x0+6*Math.sin(y*.010+.5)*Math.min(1,(y-GY)/120)+3*Math.sin(y*.027)*Math.min(1,(y-GY)/80)+1.5*Math.sin(y*.071+2);
   const ground=el('g',{class:'rm-ground'},rFx);
@@ -343,10 +346,10 @@ function tickRoots(vh,t){
   const sp=RM?1:clamp((yRev-RT.GY+30)/60);
   RT.sprout.style.transform=`scale(${(.2+.8*easeOutBack(sp)).toFixed(3)})`; RT.sprout.style.opacity=sstep(0,.3,sp).toFixed(3);
   RT.ground.style.opacity=sstep(0,.5,sp).toFixed(3);
-  RT.M.m.style.strokeDashoffset=(1-clamp((yRev-RT.GY)/(RT.yEnd-RT.GY))).toFixed(4);
-  RT.hairs.forEach(h=>{ const on=yRev>h.y+6; if(on!==h.on){ h.on=on; h.m.style.strokeDashoffset=on?0:1; } });
+  draw(RT.M.m,clamp((yRev-RT.GY)/(RT.yEnd-RT.GY)));
+  RT.hairs.forEach(h=>{ const on=yRev>h.y+6; if(on!==h.on){ h.on=on; draw(h.m,on?1:0); } });
   RT.BR.forEach(b=>{ const on=yRev>b.y;
-    if(on!==b.on){ b.on=on; b.m.classList.toggle('in',on); b.parts.forEach(p=>p.m.style.strokeDashoffset=on?0:1); b.node.setAttribute('opacity',on?1:0); b.ring.setAttribute('opacity',on?1:0); }
+    if(on!==b.on){ b.on=on; b.m.classList.toggle('in',on); b.parts.forEach(p=>draw(p.m,on?1:0)); b.node.setAttribute('opacity',on?1:0); b.ring.setAttribute('opacity',on?1:0); }
     if(b.glow){ const ph=(t*.8)%1; b.glow.setAttribute('r',f1(5.5+ph*12)); b.glow.setAttribute('opacity',b.on?((1-ph)*.7).toFixed(3):0); }
   });
   rFx.querySelectorAll('.nd-hl').forEach((e,i)=>e.setAttribute('opacity',RT.BR.filter(b=>b.s==='done')[i]?.on?.8:0));
@@ -383,7 +386,8 @@ function layoutFinal(){
     L.push([cx+Math.cos(a)*(rad-w/2),cyc+Math.sin(a)*(rad-w/2)*KY]); Rr.push([cx+Math.cos(a)*(rad+w/2),cyc+Math.sin(a)*(rad+w/2)*KY]); }
   el('filter',{id:'ensoBlur',x:'-10%',y:'-10%',width:'120%',height:'120%'},defs).innerHTML='<feGaussianBlur stdDeviation="3"/>';
   const mask=el('mask',{id:'ensoM',maskUnits:'userSpaceOnUse',x:0,y:0,width:W,height:H},defs);
-  F.ensoM=el('path',{d:polyline(axis),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round',pathLength:1,'stroke-dasharray':'1 3','stroke-dashoffset':1},mask);
+  F.ensoM=el('path',{d:polyline(axis),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round'},mask);
+  dashSetup(F.ensoM);
   const g=el('g',{mask:'url(#ensoM)'},fFx); F.ensoG=g;
   el('path',{d:'M'+L.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'L'+Rr.reverse().map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z',fill:INKc,opacity:.88},g);
   for(let k=0;k<5;k++){ const s0=.55+r()*.3, s1=Math.min(1,s0+.08+r()*.12), off=(r()-.5)*5, pts=[];
@@ -397,7 +401,7 @@ function tickFinal(vh,t){
   const k=RM?1:damp('f',clamp((vh*.35-wr.top)/((wr.height-vh)*.92+vh*.35)),3.5);
   const {cx,cyc,R0,ls,fy}=F;
   const en=sstep(0,.62,k);
-  F.ensoM.setAttribute('stroke-dashoffset',(1-en).toFixed(4));
+  draw(F.ensoM,en);
   F.ensoG.style.opacity=sstep(0,.12,k).toFixed(3);
   const lg=RM?1:sstep(.5,.78,k), le=1-Math.pow(1-lg,3);
   F.logo.setAttribute('transform',`translate(${f1(cx)} ${f1(fy+(1-le)*10)}) scale(${(ls*(.9+.1*le)).toFixed(4)})`);
