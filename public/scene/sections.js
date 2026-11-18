@@ -333,8 +333,9 @@ function layoutRoots(){
     el('ellipse',{cx:f1(x),cy:f1(y),rx:f1(w),ry:f1(w*.6),fill:'none',stroke:INKc,'stroke-width':.7,opacity:.13},soil); }
 }
 function tickRoots(vh,t){
-  if(!RT) return; const box=rootsBox.getBoundingClientRect(); if(!visible(box)) return;
-  const TOP=74, yRev=RM?1e5:damp('r',(vh*.74-box.top+TOP),5);
+  if(!RT) return; const box=rootsBox.getBoundingClientRect(), TOP=74, target=vh*.74-box.top+TOP;
+  const vis=visible(box); if(!vis){ const side=box.top>0?'below':'above'; if(RT.parked===side) return; RT.parked=side; SM.r=target; } else RT.parked=null;
+  const yRev=RM?1e5:(vis?damp('r',target,5):target);
   const sp=RM?1:clamp((yRev-RT.GY+30)/60);
   RT.sprout.style.transform=`scale(${(.2+.8*easeOutBack(sp)).toFixed(3)})`; RT.sprout.style.opacity=sstep(0,.3,sp).toFixed(3);
   RT.ground.style.opacity=sstep(0,.5,sp).toFixed(3);
