@@ -20,9 +20,9 @@ export function Limits() {
 			<Eyebrow>What we do not promise</Eyebrow>
 			<Heading>This section matters more than the one above it.</Heading>
 			<Text variant="lead">
-				Staking today offers one risk profile and no choice about it — the same on every
-				chain. We are adding the layer that was missing: a queue you pick your place in. It
-				is new, so the honest thing is to show its edges before its APY.
+				On-chain, every asset offers one risk profile and no choice about it — the same on
+				every chain. We are adding the layer that was missing: a queue you pick your place
+				in. It is new, so the honest thing is to show its edges before its upside.
 			</Text>
 			<div className={css.list} id="kin">
 				{LIMITS.map((l) => (

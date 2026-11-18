@@ -12,7 +12,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-	title: "Resu — staking with a chosen risk tier",
+	title: "Resu — choose your risk on any asset",
 	description: DESCRIPTION,
 	icons: {
 		icon: [

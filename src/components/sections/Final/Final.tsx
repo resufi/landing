@@ -11,11 +11,11 @@ export function Final() {
 				<svg className={cx(css.fx, css.front)} id="finalFront" aria-hidden="true" />
 				<div className={cx(css.inner, "final-in")}>
 					<Heading size="final">
-						Staking where you choose what you lose, and in what order.
+						Choose your risk on any asset — and get paid for the risk you take.
 					</Heading>
 					<Text>
 						The mechanics work and are covered by tests. The open question is whether anyone
-						wants them. Try the pool and tell us.
+						wants them. Try the app and tell us.
 					</Text>
 					<div className={css.cta}>
 						<ButtonRow center reveal={false}>

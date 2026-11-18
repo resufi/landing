@@ -10,11 +10,12 @@ export function Queue() {
 	return (
 		<Section id="queue">
 			<svg className={css.fx} id="queueFx" aria-hidden="true" />
-			<Eyebrow>Risk-curated staking on EVM and non-EVM chains</Eyebrow>
-			<Heading size="big">Choose where you stand in the loss queue.</Heading>
+			<Eyebrow>On-chain risk tiers for real-world assets — and ETH, staking tokens and more</Eyebrow>
+			<Heading size="big">Choose your risk on any asset.</Heading>
 			<Text variant="lead">
-				Everywhere else a loss is split evenly — the cautious saver and the yield chaser
-				lose the same 10%. Resu changes exactly one thing, and it changes everything.
+				Everywhere else a gain and a loss are shared evenly — the cautious saver and the
+				yield chaser get the same number. Resu lets each pick a tier instead: protected and
+				steady, or aggressive and high-upside.
 			</Text>
 			<ButtonRow>
 				<Button href={APP_URL} external>
@@ -25,10 +26,10 @@ export function Queue() {
 				</Button>
 			</ButtonRow>
 			<Text variant="fine">
-				No token of our own. No points. No promised APY — just ordinary staking yield,
-				divided differently. Live across six chains, EVM and non-EVM, and the list will
-				only grow: the mechanism is arithmetic, and arithmetic ports anywhere there is an
-				asset to build on.
+				Built first for tokenized real-world assets — and just as at home with ETH, staking
+				tokens and yield-bearing stablecoins. Live across seven chains, EVM and non-EVM, with
+				an activity-points program toward the future $RESU token. The mechanism is
+				arithmetic, and it ports anywhere there is an asset to build on.
 			</Text>
 			<div className={css.bars} id="bars" aria-label="Loss queue">
 				{TRANCHES.map((t, i) => (

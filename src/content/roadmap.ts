@@ -40,17 +40,17 @@ export const ROADMAP: readonly Milestone[] = [
 		title: "More chains, same arithmetic",
 		body:
 			"The mechanism is arithmetic, so each chain is a deployment, not a " +
-			"redesign. Live on six chains — TON, Solana, HyperEVM, Robinhood, " +
-			"Arbitrum and Base — EVM and non-EVM alike.",
+			"redesign. Live on seven chains — Base, Arbitrum, Robinhood, HyperEVM, " +
+			"Monad, Solana and TON — EVM and non-EVM alike.",
 	},
 	{
 		stage: "next",
 		when: "Later",
 		title: "Revenue for the protocol",
 		body:
-			"Today there is not a single protocol fee in the contracts: 100% of the " +
-			"protection fee moves between depositors and none of it reaches us. When " +
-			"the time comes, the fairest cut is a share of that fee — paid for work " +
-			"actually done, not for holding coins.",
+			"Today almost all of the coupon and protection-fee flow moves between " +
+			"depositors, not to us. The $RESU token and its activity points are the " +
+			"user-and-investor layer; a modest protocol share of the fee comes later — " +
+			"the fairest cut, paid for work actually done, not for holding coins.",
 	},
 ];
