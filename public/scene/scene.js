@@ -102,6 +102,7 @@ function layout() {
   sunSvg.setAttribute('viewBox', vb);
   const sx = W <= IW + 1 ? SUN.x : Math.max(SUN.x, W * .66);
   sun.setAttribute('cx', sx); sun.setAttribute('cy', SUN.y);
+  sunWrap.style.visibility = 'visible';
   const drift = {};
   for (const id in LAYERS) {
     const cfg = LAYERS[id], { VW, svg } = cloudSvg(id, cfg, W, y0, H), el = $(id);
@@ -113,11 +114,12 @@ function layout() {
   const ox = SAM.x * s, oy = (SAM.y - 35 - y0) * s;
   for (const z of zoomLayers) z.el.style.transformOrigin = `${f(ox)}px ${f(oy)}px`;
   V = { s, y0, drift, rise: (1200 - SUN.y) * s };
+  if (!sunDone && !reduce.matches) sunWrap.style.transform = `translate3d(0,${V.rise.toFixed(2)}px,0)`;
   rasterize();
 }
 
 const TREE_CUT = 488, TREE_PIVOT = [345, 492];
-let sway = null, rockCv = null, artTxt = null, rasterK = 0, rasterBusy = false;
+let sway = null, rockCv = null, rasterK = 0, rasterBusy = false;
 const sceneLayer = $('layerScene');
 function artBox() { const u = ART_SCALE * V.s; return { top: (IH - IH * ART_SCALE - V.y0) * V.s, u }; }
 function placeArt() {
@@ -125,35 +127,43 @@ function placeArt() {
   rockCv.style.cssText = `position:absolute;left:0;top:${f(b.top + TREE_CUT * b.u)}px;width:${f(2048 * b.u)}px;height:${f((1152 - TREE_CUT) * b.u)}px`;
   sway.style.cssText = `position:absolute;left:0;top:${f(b.top)}px;width:${f(2048 * b.u)}px;height:${f((TREE_CUT + 1) * b.u)}px;will-change:transform;transform-origin:${f(TREE_PIVOT[0] * b.u)}px ${f(TREE_PIVOT[1] * b.u)}px`;
 }
+const COARSE = matchMedia('(pointer: coarse)').matches || innerWidth < 820;
+const artImgs = {};
+function artImg(w) {
+  if (!artImgs[w]) {
+    const img = new Image(); img.decoding = 'async'; img.src = `${BASE}/scene/cliff-tree-${w}.webp`;
+    artImgs[w] = (img.decode ? img.decode() : new Promise((r, e) => { img.onload = r; img.onerror = e; })).then(() => img);
+  }
+  return artImgs[w];
+}
 function rasterize() {
-  if (!artTxt || !V || rasterBusy) return;
+  if (!V || rasterBusy) return;
   const b = artBox(), dpr = Math.min(devicePixelRatio || 1, 2);
-  const k = Math.min(b.u * dpr * 2.5, 5600 / 2048);
+  const k = Math.min(b.u * dpr * (COARSE ? 1.25 : 2.5), (COARSE ? 2048 : 4096) / 2048);
   if (rasterK && k <= rasterK * 1.05) { placeArt(); return; }
   rasterBusy = true;
   const Wp = Math.round(2048 * k), Hp = Math.round(1152 * k), cut = Math.round(TREE_CUT * k);
-  const svg = artTxt.replace('width="2048" height="1152"', `width="${Wp}" height="${Hp}" preserveAspectRatio="none"`);
-  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
-  const img = new Image(); img.decoding = 'async'; img.src = url;
-  (img.decode ? img.decode() : new Promise(r => img.onload = r)).then(() => {
+  artImg(Wp > 2048 ? 4096 : 2048).then(img => {
     const rc = document.createElement('canvas'); rc.width = Wp; rc.height = Hp - cut;
-    const x = rc.getContext('2d'); x.drawImage(img, 0, -cut);
+    const x = rc.getContext('2d'); x.drawImage(img, 0, -cut, Wp, Hp);
     x.globalCompositeOperation = 'destination-in';
     const g = x.createLinearGradient(0, 762 * k - cut, 0, 915 * k - cut);
     g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
     x.fillStyle = g; x.fillRect(0, 0, rc.width, rc.height);
     const tc = document.createElement('canvas'); tc.width = Wp; tc.height = Math.round((TREE_CUT + 1) * k);
-    tc.getContext('2d').drawImage(img, 0, 0);
-    URL.revokeObjectURL(url);
+    tc.getContext('2d').drawImage(img, 0, 0, Wp, Hp);
     rc.setAttribute('aria-hidden', 'true'); tc.setAttribute('aria-hidden', 'true');
     if (rockCv) { rockCv.replaceWith(rc); sway.replaceWith(tc); }
     else { sceneLayer.insertBefore(rc, sceneSvg); sceneLayer.insertBefore(tc, sceneSvg); $('cliffTree').innerHTML = ''; }
     rockCv = rc; sway = tc; rasterK = k; rasterBusy = false; placeArt();
   }).catch(() => { rasterBusy = false; });
 }
-fetch(BASE + '/scene/cliff-tree.svg')
-  .then(r => r.text())
-  .then(txt => { artTxt = txt; requestAnimationFrame(() => setTimeout(rasterize, 0)); });
+artImg(COARSE ? 2048 : 4096);
+if (COARSE) {
+  $('trailGlow').removeAttribute('filter');
+  document.querySelector('#shS feGaussianBlur').setAttribute('stdDeviation', '5');
+  document.querySelector('#shH feGaussianBlur').setAttribute('stdDeviation', '1.2');
+}
 
 const samurai = $('samurai');
 samurai.setAttribute('transform', `translate(${SAM.x} ${SAM.y}) scale(${SAM.scale})`);

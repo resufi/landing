@@ -46,6 +46,7 @@
 }
 
 .sun {
+	visibility: hidden;
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
