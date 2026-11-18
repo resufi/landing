@@ -39,11 +39,14 @@ const io=new IntersectionObserver(es=>{ for(const e of es){ if(!e.isIntersecting
 $$('.rv,.brush,#stats,.kr').forEach(x=>io.observe(x));
 
 const qFx=$('#queueFx'), rows=$$('#bars .bar-row');
-const qPetals=[0,1,2].map(i=>{ const g=el('g',{},qFx); g.innerHTML=petalSVG(LAVc,'#7a68b8',1.2); g.style.opacity=0; return g; });
+const QM=matchMedia('(max-width: 820px), (pointer: coarse)').matches;
+const qPetals=QM?[]:[0,1,2].map(i=>{ const g=el('g',{},qFx); g.innerHTML=petalSVG(LAVc,'#7a68b8',1.2); g.style.opacity=0; return g; });
 const SHADES=[V1,V2,V3];
 function tickQueue(vh,t){
   const bars=$('#bars').getBoundingClientRect(), sec=$('#queue').getBoundingClientRect();
   if(!visible(sec)) return;
+  if(QM){ rows.forEach((row,i)=>{ const top=row.getBoundingClientRect().top;
+      const ri=RM?1:damp('qb'+i,clamp((vh*.9-top)/(vh*.3)),3.5); setBar(row,ri); }); return; }
   let k=RM?1:damp('q',clamp((vh*1.02-bars.top)/(vh*.8)),4.5);
   const rr=rows.map(r=>r.querySelector('.bar').getBoundingClientRect());
   const S={x:sec.width*.64, y:(bars.top-sec.top)-vh*.78};
@@ -59,11 +62,12 @@ function tickQueue(vh,t){
     const sc=lerp(.42,.32,split)*(1-.35*sstep(.85,1,ri));
     g.setAttribute('transform',`translate(${f1(x)} ${f1(y)}) rotate(${f1(rot+Math.sin(t*2+i)*4*(1-ri))}) scale(${sc.toFixed(3)})`);
     g.style.opacity=(sstep(0,.06,k)*(1-sstep(.88,1,ri))).toFixed(3);
-    const bar=rows[i].querySelector('.bar'); bar.querySelector('.fill').style.setProperty('--w',(ri*104).toFixed(1)+'%');
-    bar.classList.toggle('lit',ri>.45);
-    rows[i].querySelector('.bv em').textContent='~'+(rows[i].dataset.v*sstep(0,1,ri)).toFixed(1)+'%';
+    setBar(rows[i],ri);
   });
 }
+function setBar(row,ri){ const bar=row.querySelector('.bar'); bar.querySelector('.fill').style.setProperty('--w',(ri*104).toFixed(1)+'%');
+  bar.classList.toggle('lit',ri>.45);
+  row.querySelector('.bv em').textContent='~'+(row.dataset.v*sstep(0,1,ri)).toFixed(1)+'%'; }
 
 let statsRan=false;
 function buildNum(n,si){ const v=n.textContent.trim(); n.textContent=''; n.setAttribute('aria-label',v);
@@ -286,7 +290,7 @@ function layoutRoots(){
   const defs=el('defs',{},rFx), mask=el('mask',{id:'rootMask',maskUnits:'userSpaceOnUse',x:-50,y:-50,width:RW+100,height:H+100},defs);
   const gFill=el('g',{mask:'url(#rootMask)'},rFx);
   const piece=(pts,w0,w1,opts={})=>{ const fill=el('path',{d:tapered(pts,w0,w1),fill:opts.col||INKc,opacity:opts.op??1},gFill);
-    const m=el('path',{d:polyline(pts),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',pathLength:1,'stroke-dasharray':1,'stroke-dashoffset':1},mask);
+    const m=el('path',{d:polyline(pts),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',pathLength:1,'stroke-dasharray':'1 3','stroke-dashoffset':1},mask);
     if(opts.tr) m.style.transition=opts.tr; return {fill,m,y:pts[0][1]}; };
   const xAt=y=>x0+6*Math.sin(y*.010+.5)*Math.min(1,(y-GY)/120)+3*Math.sin(y*.027)*Math.min(1,(y-GY)/80)+1.5*Math.sin(y*.071+2);
   const ground=el('g',{class:'rm-ground'},rFx);
@@ -379,7 +383,7 @@ function layoutFinal(){
     L.push([cx+Math.cos(a)*(rad-w/2),cyc+Math.sin(a)*(rad-w/2)*KY]); Rr.push([cx+Math.cos(a)*(rad+w/2),cyc+Math.sin(a)*(rad+w/2)*KY]); }
   el('filter',{id:'ensoBlur',x:'-10%',y:'-10%',width:'120%',height:'120%'},defs).innerHTML='<feGaussianBlur stdDeviation="3"/>';
   const mask=el('mask',{id:'ensoM',maskUnits:'userSpaceOnUse',x:0,y:0,width:W,height:H},defs);
-  F.ensoM=el('path',{d:polyline(axis),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round',pathLength:1,'stroke-dasharray':1,'stroke-dashoffset':1},mask);
+  F.ensoM=el('path',{d:polyline(axis),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round',pathLength:1,'stroke-dasharray':'1 3','stroke-dashoffset':1},mask);
   const g=el('g',{mask:'url(#ensoM)'},fFx); F.ensoG=g;
   el('path',{d:'M'+L.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'L'+Rr.reverse().map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z',fill:INKc,opacity:.88},g);
   for(let k=0;k<5;k++){ const s0=.55+r()*.3, s1=Math.min(1,s0+.08+r()*.12), off=(r()-.5)*5, pts=[];

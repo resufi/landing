@@ -199,6 +199,7 @@ const slash = $('slash'), trailGlow = $('trailGlow'), trailBody = $('trailBody')
 const cutShadow = $('cutShadow'), cutEdge = $('cutEdge'), scrollBadge = $('scrollBadge');
 const brand = $('brand'), bLogo = $('brandLogo'), bChars = [...brand.querySelectorAll('.char')], bRule = $('brandRule'), bLav = $('brandLav');
 let line = null, maskKey = '';
+const brandEl = $('brand');
 
 const STREAKS = [[-.9, .05, .55, .5], [-1.6, .2, .8, .35], [1.3, .1, .45, .45], [2.1, .35, .9, .3], [-2.4, .45, .95, .25]];
 function bez(c, t) {
@@ -240,9 +241,13 @@ function measureLine() {
   const X0 = -.5 * vw, X1 = 1.5 * vw;
   const upper = `M${curve}L${f(X1)} ${f(B.y)}L${f(X1)} ${f(-3 * vh)}L${f(X0)} ${f(-3 * vh)}L${f(X0)} ${f(A.y)}Z`;
   const lower = `M${curve}L${f(X1)} ${f(B.y)}L${f(X1)} ${f(3 * vh)}L${f(X0)} ${f(3 * vh)}L${f(X0)} ${f(A.y)}Z`;
+  const lp = [...dense, { x: X1, y: B.y }, { x: X1, y: 3 * vh }, { x: X0, y: 3 * vh }, { x: X0, y: A.y }].map(q => [Math.round(q.x * 10), Math.round(q.y * 10)]);
+  let lowerRel = '';
+  for (let i = 1; i < lp.length; i++) lowerRel += `l${(lp[i][0] - lp[i - 1][0]) / 10} ${(lp[i][1] - lp[i - 1][1]) / 10}`;
+  const lowerAt = dy => `path("M${lp[0][0] / 10} ${(lp[0][1] / 10 + dy).toFixed(1)}${lowerRel}z")`;
   const nm = { x: n.x, y: n.y }, mid = pts[N >> 1];
   const far = Math.max(...[[vw, vh], [0, vh], [vw, 0]].map(([x, y]) => (x - mid.x) * nm.x + (y - mid.y) * nm.y));
-  line = { pts, W: .075 * vh, vw, vh, upper, lower, n: nm, mid, far, lift };
+  line = { pts, W: .075 * vh, vw, vh, upper, lower, lowerAt, n: nm, mid, far, lift };
   cutShadow.setAttribute('viewBox', `0 0 ${vw} ${vh}`); cutEdge.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
   const sr2 = $('shRect'); sr2.setAttribute('width', vw); sr2.setAttribute('height', vh + 5000);
   $('shSoft').setAttribute('d', upper); $('shHard').setAttribute('d', upper);
@@ -278,54 +283,39 @@ function drawTrail(r) {
   trailBody.setAttribute('d', body); trailStreaks.setAttribute('d', streaks); trailGlow.setAttribute('d', body + streaks);
 }
 
-function svgUrl(d, L) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${L.vw}" height="${L.vh}" viewBox="0 0 ${L.vw} ${L.vh}" preserveAspectRatio="none"><path d="${d}" fill="#fff"/></svg>`;
-  const src = 'data:image/svg+xml,' + encodeURIComponent(svg);
-  const im = new Image(); im.src = src; if (im.decode) im.decode().catch(() => {});
-  return `url("${src}")`;
-}
 function prepMask() {
   const L = line;
-  L.urlUp = svgUrl(L.upper, L); L.urlLow = svgUrl(L.lower, L);
   L.ang = Math.atan2(L.n.x, -L.n.y) * 180 / Math.PI;
   const gl = Math.abs(L.vw * L.n.x) + Math.abs(L.vh * L.n.y);
   const pc = (L.vw / 2) * L.n.x + (L.vh / 2) * L.n.y;
   L.g0 = pc - gl / 2;
   L.pm = L.mid.x * L.n.x + L.mid.y * L.n.y;
 }
-function setMask(d) {
-  const L = line, key = d >= 1 ? 'done' : d.toFixed(4);
+let prepped = null;
+function setMask(d, D, off) {
+  const L = line, key = (d >= 1 ? 'done' : d.toFixed(4)) + '|' + D.toFixed(1) + '|' + off.toFixed(1);
   if (key === maskKey) return; maskKey = key;
-  const st = stage.style;
-  if (d >= 1) {
-    st.webkitMaskImage = st.maskImage = L.urlUp;
-    st.maskComposite = ''; st.webkitMaskComposite = '';
-    return;
-  }
+  const bs = brandEl.style;
+  bs.zIndex = '10';
+  bs.clipPath = bs.webkitClipPath = L.lowerAt(-D);
+  cutShadow.style.zIndex = '10';
+  cutShadow.style.clipPath = cutShadow.style.webkitClipPath = L.lowerAt(-off);
+  if (d >= 1) { bs.webkitMaskImage = bs.maskImage = ''; return; }
   const w = 1.2 - 1.4 * d, s1 = L.pm + L.far * (w - .22) - L.g0, s2 = L.pm + L.far * w - L.g0;
-  const grad = `linear-gradient(${L.ang.toFixed(2)}deg, #000 ${s1.toFixed(1)}px, transparent ${Math.max(s1 + 1, s2).toFixed(1)}px)`;
-  const img = `${L.urlUp}, ${grad}, ${L.urlLow}`;
-  st.webkitMaskImage = st.maskImage = img;
-  st.maskComposite = 'add, intersect, add';
-  st.webkitMaskComposite = 'source-over, source-in, source-over';
-}
-let prepped = null, warm = null;
-function warmMask() {
-  if (!warm) { warm = document.createElement('div'); warm.setAttribute('aria-hidden', 'true');
-    warm.style.cssText = 'position:fixed;inset:0;pointer-events:none;opacity:.002;background:#000;z-index:-1;-webkit-mask-size:100% 100%;mask-size:100% 100%'; document.body.appendChild(warm); }
-  warm.style.webkitMaskImage = warm.style.maskImage = `${line.urlUp}, ${line.urlLow}`;
+  bs.webkitMaskImage = bs.maskImage = `linear-gradient(${L.ang.toFixed(2)}deg, transparent ${s1.toFixed(1)}px, #000 ${Math.max(s1 + 1, s2).toFixed(1)}px)`;
 }
 function clearMask() {
-  const st = stage.style;
-  st.webkitMaskImage = st.maskImage = ''; st.maskComposite = ''; st.webkitMaskComposite = ''; maskKey = '';
+  const bs = brandEl.style;
+  bs.zIndex = ''; bs.clipPath = bs.webkitClipPath = ''; bs.webkitMaskImage = bs.maskImage = '';
+  cutShadow.style.zIndex = ''; cutShadow.style.clipPath = cutShadow.style.webkitClipPath = '';
+  maskKey = '';
 }
 
 function cutFrame(p) {
   if (p < PH.slash[0]) {
     if (line) { slash.style.opacity = 0; clearMask(); stage.style.transform = ''; stage.style.visibility = ''; cutShadow.style.opacity = cutEdge.style.opacity = 0; line = null; }
   } else if (!line) { if (prepped) line = prepped; else { measureLine(); prepMask(); } }
-  if (!prepped && p >= PH.slash[0] - .12) { const was = line; measureLine(); prepMask(); warmMask(); prepped = line; line = was ? prepped : null; }
-  if (warm && p >= PH.dissolve[1]) { warm.remove(); warm = null; }
+  if (!prepped && p >= PH.slash[0] - .12) { const was = line; measureLine(); prepMask(); prepped = line; line = was ? prepped : null; }
 
   sun.setAttribute('fill', mix('#c62824', LAV, smooth(0, 1, span('tint', p))));
   sun.style.opacity = (1 - smooth(.15, .7, span('dissolve', p))).toFixed(3);
@@ -348,13 +338,13 @@ function cutFrame(p) {
   slash.style.opacity = (1 - smooth(0, 1, span('trail', p))).toFixed(3);
 
   const d = easeInOut(span('dissolve', p));
-  if (p >= PH.slash[1] - .004) setMask(d); else clearMask();
 
   const L = line, D = L.lift * lift;
   const tr = lift > 0 ? `translate3d(0,${f(-D)}px,0)` : '';
   stage.style.transform = tr; cutEdge.style.transform = tr;
   const off = 7 + 20 * lift;
   cutShadow.style.transform = `translate3d(0,${f(-D + off)}px,0)`;
+  if (p >= PH.slash[1] - .004 && lift < 1) setMask(d, D, off); else clearMask();
   const cut = p >= PH.slash[1] - .004;
   cutShadow.style.opacity = cut ? (smooth(.1, .8, d) * (1 - smooth(.85, 1, lift))).toFixed(3) : 0;
   cutEdge.style.opacity = cut ? (smooth(.2, 1, span('trail', p)) * (1 - smooth(.9, 1, lift))).toFixed(3) : 0;
