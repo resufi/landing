@@ -38,11 +38,12 @@ export function MotionRuntime() {
 		window.gsap = gsap;
 
 		const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		if (!reduced) {
+		const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+		gsap.ticker.lagSmoothing(0);
+		if (!reduced && fine) {
 			const lenis = new Lenis({ lerp: 0.085, smoothWheel: true, anchors: true });
 			window.__resuLenis = lenis;
 			gsap.ticker.add((t) => lenis.raf(t * 1000));
-			gsap.ticker.lagSmoothing(0);
 		}
 
 		loadInOrder(SCRIPTS).catch((e: unknown) => console.error(e));

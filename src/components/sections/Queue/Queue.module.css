@@ -48,12 +48,10 @@
 }
 
 .fill {
-	--w: 0%;
 	position: absolute;
 	inset: 0;
 	border-radius: 19px;
-	-webkit-mask-image: linear-gradient(90deg, #000 calc(var(--w) - 4%), transparent var(--w));
-	mask-image: linear-gradient(90deg, #000 calc(var(--w) - 4%), transparent var(--w));
+	clip-path: inset(0 100% 0 0 round 19px);
 }
 
 .t1 .fill { background: var(--v1); }

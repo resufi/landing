@@ -50,8 +50,8 @@ const SHADES=[V1,V2,V3];
 function tickQueue(vh,t){
   const bars=$('#bars').getBoundingClientRect(), sec=$('#queue').getBoundingClientRect();
   if(!visible(sec)) return;
-  if(QM){ rows.forEach((row,i)=>{ const top=row.getBoundingClientRect().top;
-      const ri=RM?1:damp('qb'+i,clamp((vh*.9-top)/(vh*.3)),3.5); setBar(row,ri); }); return; }
+  if(QM){ const tops=rows.map(r=>r.getBoundingClientRect().top);
+    rows.forEach((row,i)=>setBar(row,RM?1:damp('qb'+i,clamp((vh*.9-tops[i])/(vh*.3)),3.5))); return; }
   let k=RM?1:damp('q',clamp((vh*1.02-bars.top)/(vh*.8)),4.5);
   const rr=rows.map(r=>r.querySelector('.bar').getBoundingClientRect());
   const S={x:sec.width*.64, y:(bars.top-sec.top)-vh*.78};
@@ -70,7 +70,7 @@ function tickQueue(vh,t){
     setBar(rows[i],ri);
   });
 }
-function setBar(row,ri){ const bar=row.querySelector('.bar'); bar.querySelector('.fill').style.setProperty('--w',(ri*104).toFixed(1)+'%');
+function setBar(row,ri){ const bar=row.querySelector('.bar'); bar.querySelector('.fill').style.clipPath=`inset(0 ${(100-clamp(ri)*100).toFixed(1)}% 0 0 round 19px)`;
   bar.classList.toggle('lit',ri>.45);
   row.querySelector('.bv em').textContent='~'+(row.dataset.v*sstep(0,1,ri)).toFixed(1)+'%'; }
 
