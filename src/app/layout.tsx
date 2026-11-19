@@ -46,7 +46,7 @@ export default function RootLayout({
 				<noscript>
 					<style>
 						{
-							"#intro{display:none}.rv,.rm,.kr *,.stat *{opacity:1!important;transform:none!important}.brush path,.kr path{stroke-dashoffset:0!important}#openApp{opacity:1!important}"
+							"#intro{display:none}.rv,.rm,.kr *,.stat *{opacity:1!important;transform:none!important}.brush svg,.kr path{clip-path:none!important}#openApp{opacity:1!important}"
 						}
 					</style>
 				</noscript>

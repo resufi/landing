@@ -172,7 +172,7 @@ const POSES = [...samurai.querySelectorAll('.pose')];
 
 let pose = 0, prev = null, shown = [];
 function scrollProgress() {
-  const max = root.offsetHeight - innerHeight;
+  const vh = stage.clientHeight || innerHeight, max = root.offsetHeight - vh - .6 * vh;
   return max > 0 ? clamp(scrollY / max) : 0;
 }
 function showPose(fr) {
@@ -359,13 +359,17 @@ function mix(a, b, k) {
 
 let t0 = null, prog = 0, zLast = '', zMoved = 0, zLifted = false, lastProg = -1, sunDone = false;
 const RISE_DELAY = .5, RISE_DUR = 5.5;
+const TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches;
 
 function frame(now) {
   if (t0 === null) t0 = now;
   const t = (now - t0) / 1000, still = reduce.matches;
   const dt = prev === null ? 0 : Math.min(.1, (now - prev) / 1000); prev = now;
   const target = scrollProgress();
-  prog += still ? target - prog : (target - prog) * (1 - Math.exp(-dt * 10));
+  if (still) prog = target;
+  else if (target > prog && prog >= PH.slash[1]) prog = Math.min(target, prog + Math.max(dt, 1 / 120) * (1 - PH.slash[1]) / .9);
+  else if (TOUCH && !(target > prog && target >= PH.slash[1])) prog = target;
+  else prog += (target - prog) * (1 - Math.exp(-dt * 10));
   if (Math.abs(target - prog) < 1e-4) prog = target;
 
   if (prog < 1) {

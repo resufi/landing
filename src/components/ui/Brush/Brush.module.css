@@ -8,6 +8,12 @@
 	width: 240px;
 	height: 12px;
 	overflow: visible;
+	clip-path: inset(-6px 100% -6px -6px);
+	transition: clip-path 1.6s var(--ease-brush);
+}
+
+.brush:global(.in) svg {
+	clip-path: inset(-6px -6px -6px -6px);
 }
 
 .stroke {
@@ -15,11 +21,4 @@
 	stroke: url(#brushGrad);
 	stroke-width: 1.6;
 	stroke-linecap: round;
-	stroke-dasharray: 1;
-	stroke-dashoffset: 1;
-	transition: stroke-dashoffset 1.6s var(--ease-brush);
-}
-
-.brush:global(.in) .stroke {
-	stroke-dashoffset: 0;
 }

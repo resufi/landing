@@ -12,7 +12,7 @@ export function Brush({ variant = 0 }: { variant?: 0 | 1 | 2 | 3 }) {
 	return (
 		<div className={cx(css.brush, "brush")} aria-hidden="true">
 			<svg viewBox="0 0 240 12" preserveAspectRatio="none">
-				<path className={css.stroke} pathLength={1} d={STROKES[variant]} />
+				<path className={css.stroke} d={STROKES[variant]} />
 			</svg>
 		</div>
 	);

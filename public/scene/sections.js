@@ -28,9 +28,14 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rnd=rng(2026);
 const LAVc='#b4a3e8', V1='#cfc4f4', V2='#a996e8', V3='#7c5ce6', INKc='#1c1a17', IVc='#efebe3';
-const visible=r=>r.bottom>-80 && r.top<innerHeight+80;
+const TOUCH=matchMedia('(hover: none) and (pointer: coarse)').matches;
+const vhProbe=document.createElement('div'); vhProbe.setAttribute('aria-hidden','true');
+vhProbe.style.cssText='position:fixed;top:0;left:0;width:0;height:100vh;visibility:hidden;pointer-events:none';
+document.body.appendChild(vhProbe);
+let VH=vhProbe.offsetHeight||innerHeight;
+const visible=r=>r.bottom>-80 && r.top<VH+80;
 const SM={}; let SM_dt=1/60, SM_last=0;
-function damp(key,target,rate=5){ const c=SM[key]; if(c===undefined||RM){ SM[key]=target; return target; }
+function damp(key,target,rate=5){ if(TOUCH) rate*=4; const c=SM[key]; if(c===undefined||RM){ SM[key]=target; return target; }
   const v=c+(target-c)*(1-Math.exp(-SM_dt*rate)); SM[key]=Math.abs(v-target)<1e-4?target:v; return SM[key]; }
 
 const io=new IntersectionObserver(es=>{ for(const e of es){ if(!e.isIntersecting) continue; const t=e.target; t.classList.add('in'); io.unobserve(t);
@@ -280,6 +285,7 @@ function wander(x,y,ang,len,step,r,bend=.35,down=.04){ const pts=[[x,y]]; let a=
   for(let d=0;d<len;d+=step){ a+=(r()-.5)*bend; a+=(Math.PI/2-a)*down; x+=Math.cos(a)*step; y+=Math.sin(a)*step; pts.push([x,y]); } return pts; }
 function dashSetup(m){ const L=m.getTotalLength()||1; m.L=L; m.setAttribute('stroke-dasharray',`${L.toFixed(1)} ${(L*3+40).toFixed(1)}`); draw(m,0); return m; }
 function draw(m,k){ m.style.strokeDashoffset=((1-k)*m.L).toFixed(1); m.style.visibility=k<=0?'hidden':''; }
+const thin=(p,max=90)=>{ if(p.length<=max) return p; const k=Math.ceil(p.length/max), o=p.filter((_,i)=>i%k===0); if(o[o.length-1]!==p[p.length-1]) o.push(p[p.length-1]); return o; };
 const polyline=p=>'M'+p.map(q=>f1(q[0])+' '+f1(q[1])).join('L');
 function layoutRoots(){
   rFx.innerHTML='';
@@ -292,7 +298,7 @@ function layoutRoots(){
   const defs=el('defs',{},rFx), mask=el('mask',{id:'rootMask',maskUnits:'userSpaceOnUse',x:-50,y:-50,width:RW+100,height:H+100},defs);
   const gFill=el('g',{mask:'url(#rootMask)'},rFx);
   const piece=(pts,w0,w1,opts={})=>{ const fill=el('path',{d:tapered(pts,w0,w1),fill:opts.col||INKc,opacity:opts.op??1},gFill);
-    const m=el('path',{d:polyline(pts),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',},mask);
+    const m=el('path',{d:polyline(thin(pts)),fill:'none',stroke:'#fff','stroke-width':w0+8,'stroke-linecap':'round','stroke-linejoin':'round',},mask);
     dashSetup(m);
     if(opts.tr) m.style.transition=opts.tr; return {fill,m,y:pts[0][1]}; };
   const xAt=y=>x0+6*Math.sin(y*.010+.5)*Math.min(1,(y-GY)/120)+3*Math.sin(y*.027)*Math.min(1,(y-GY)/80)+1.5*Math.sin(y*.071+2);
@@ -360,10 +366,11 @@ $$('.kr .crack').forEach((svg,i)=>{
   const r=rng(400+i); let x=0, y=8, d=`M0 8`, pts=[[0,8]];
   while(x<1000){ x+=10+r()*34; y=clamp(8+(r()-.5)*(r()<.25?14:7),1,15); pts.push([Math.min(x,1000),y]); }
   d='M'+pts.map(p=>f1(p[0])+' '+f1(p[1])).join('L');
-  el('path',{d,class:'ink',pathLength:1},svg);
-  el('path',{d,class:'gold',pathLength:1},svg);
+  el('path',{d,class:'ink'},svg);
+  el('path',{d,class:'glow'},svg);
+  el('path',{d,class:'gold'},svg);
   const j=pts[2+Math.floor(r()*(pts.length-4))], dir=r()<.5?-1:1;
-  el('path',{d:`M${f1(j[0])} ${f1(j[1])}l${f1(14+r()*20)} ${f1(dir*5)}l${f1(10+r()*14)} ${f1(dir*2)}`,class:'twig',pathLength:1},svg);
+  el('path',{d:`M${f1(j[0])} ${f1(j[1])}l${f1(14+r()*20)} ${f1(dir*5)}l${f1(10+r()*14)} ${f1(dir*2)}`,class:'twig'},svg);
 });
 
 const fFx=$('#finalFx'), fFront=$('#finalFront'), finalSec=$('#final'), openApp=$('#openApp');
@@ -386,7 +393,7 @@ function layoutFinal(){
     L.push([cx+Math.cos(a)*(rad-w/2),cyc+Math.sin(a)*(rad-w/2)*KY]); Rr.push([cx+Math.cos(a)*(rad+w/2),cyc+Math.sin(a)*(rad+w/2)*KY]); }
   el('filter',{id:'ensoBlur',x:'-10%',y:'-10%',width:'120%',height:'120%'},defs).innerHTML='<feGaussianBlur stdDeviation="3"/>';
   const mask=el('mask',{id:'ensoM',maskUnits:'userSpaceOnUse',x:0,y:0,width:W,height:H},defs);
-  F.ensoM=el('path',{d:polyline(axis),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round'},mask);
+  F.ensoM=el('path',{d:polyline(thin(axis)),fill:'none',stroke:'#fff','stroke-width':18,filter:'url(#ensoBlur)','stroke-linecap':'round'},mask);
   dashSetup(F.ensoM);
   const g=el('g',{mask:'url(#ensoM)'},fFx); F.ensoG=g;
   el('path',{d:'M'+L.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'L'+Rr.reverse().map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z',fill:INKc,opacity:.88},g);
@@ -413,13 +420,13 @@ function easeIO(x){ return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
 
 function layoutAll(){ layoutStats(); layoutRoots(); layoutFinal(); }
 addEventListener('load',layoutAll); document.fonts&&document.fonts.ready.then(layoutAll);
-let rt, lastW=innerWidth; addEventListener('resize',()=>{ if(innerWidth===lastW) return; lastW=innerWidth; clearTimeout(rt); rt=setTimeout(layoutAll,150); });
+let rt, lastW=innerWidth; addEventListener('resize',()=>{ if(innerWidth===lastW) return; lastW=innerWidth; VH=vhProbe.offsetHeight||innerHeight; clearTimeout(rt); rt=setTimeout(layoutAll,150); });
 layoutAll();
 const contentEl=$('#content'); let contentTop=0;
 const measureContent=()=>{ contentTop=contentEl.getBoundingClientRect().top+scrollY; };
 measureContent(); addEventListener('load',measureContent); addEventListener('resize',measureContent);
 document.fonts&&document.fonts.ready.then(measureContent);
-gsap.ticker.add(()=>{ const vh=innerHeight, t=performance.now()/1000; SM_dt=SM_last?Math.min(.05,t-SM_last):1/60; SM_last=t;
+gsap.ticker.add(()=>{ const vh=VH, t=performance.now()/1000; SM_dt=SM_last?Math.min(.05,t-SM_last):1/60; SM_last=t;
   if(scrollY+vh*1.15<contentTop){ for(const k in SM) delete SM[k]; return; }
   tickQueue(vh,t); tickWater(vh,t); tickCascade(vh,t); tickRoots(vh,t); tickFinal(vh,t); });
 })();
