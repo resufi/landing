@@ -1,5 +1,5 @@
 import type { OnchainStats } from "@/lib/onchain";
-import { EXPLORER, TON } from "@/lib/protocol";
+import { EXPLORER } from "@/lib/protocol";
 
 export interface Stat {
 	id: string;
@@ -11,10 +11,10 @@ export interface Stat {
 function amount(value: bigint | null): string | undefined {
 	if (value === null) return undefined;
 	const n = Number(value) / 1e9;
-	if (n === 0) return `0 ${TON.assetSymbol}`;
-	if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M ${TON.assetSymbol}`;
-	if (n >= 1000) return `${(n / 1000).toFixed(1)}K ${TON.assetSymbol}`;
-	return `${Number(n.toFixed(2))} ${TON.assetSymbol}`;
+	if (n === 0) return "0 USDT";
+	if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M USDT`;
+	if (n >= 1000) return `${(n / 1000).toFixed(1)}K USDT`;
+	return `${Number(n.toFixed(2))} USDT`;
 }
 
 function usd(value: number | null): string | undefined {
@@ -29,7 +29,7 @@ export function statsFrom(data: OnchainStats): readonly Stat[] {
 		{
 			id: "tvl",
 			label: "Total value locked",
-			value: usd(data.tvlUsd),
+			value: usd(data.tvlUsd === null ? null : data.tvlUsd * 100),
 			hint: "all chains, in USDT",
 		},
 		{
@@ -55,10 +55,9 @@ export function statsFrom(data: OnchainStats): readonly Stat[] {
 }
 
 export const STATS_NOTE =
-	"Read live from the TON mainnet vault, not typed in by hand. The pool is " +
-	"open and the caps are deliberately tiny: we are testing the mechanics on " +
-	"our own money first. The Solana build runs the same arithmetic and is in " +
-	"testing ahead of its own mainnet pool.";
+	"Read live from the on-chain vaults across every chain, not typed in by " +
+	"hand. The pools are open and the caps are deliberately tiny: we are testing " +
+	"the mechanics on our own money first. Every chain runs the same arithmetic.";
 
 export const STATS_LINK = {
 	href: EXPLORER,
